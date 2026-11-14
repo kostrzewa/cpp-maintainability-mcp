@@ -32,6 +32,22 @@ class DuplicationTests(unittest.TestCase):
             self.assertFalse(findings)
             self.assertEqual(results[str(first)].metrics["duplication"], 0.0)
 
+    def test_adjacent_windows_merge_into_one_block(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            first = Path(tmp) / "a.cpp"
+            second = Path(tmp) / "b.cpp"
+            block = "\n".join(f"int value{i} = {i};" for i in range(20))
+            first.write_text(block + "\n")
+            second.write_text(block + "\n")
+            _, findings = DuplicationAnalyzer().analyze_files([first, second])
+            self.assertEqual(len(findings), 2)
+            self.assertTrue(
+                all(
+                    finding.end_line - finding.start_line + 1 >= 20
+                    for finding in findings
+                )
+            )
+
     def test_duplicate_comment_blocks_are_ignored(self):
         with tempfile.TemporaryDirectory() as tmp:
             first = Path(tmp) / "a.cpp"

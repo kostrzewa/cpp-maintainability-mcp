@@ -8,6 +8,7 @@
   "defines": [],
   "scan_mode": "auto",
   "cppcheck_jobs": 0,
+  "regression_tolerance": 0.5,
   "tool_paths": {
     "clang_tidy": "/usr/bin/clang-tidy-22",
     "cppcheck": "/usr/bin/cppcheck",

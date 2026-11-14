@@ -2,8 +2,20 @@
 
 from __future__ import annotations
 
+import statistics
+from collections import Counter
+
 from .config import Config
-from .models import DimensionScore, FileScore, Finding, ProjectScore, band_for
+from .models import (
+    GRADES,
+    DimensionScore,
+    FileScore,
+    FileSummary,
+    Finding,
+    ProjectScore,
+    band_for,
+    grade_for,
+)
 
 
 def _clamp(value: float, low: float = 0.0, high: float = 1.0) -> float:
@@ -41,6 +53,7 @@ class ScoringEngine:
             file=file,
             score=score,
             band=band_for(score),
+            grade=grade_for(score),
             dimensions=dimensions,
             findings=findings,
             metrics=metrics,
@@ -53,15 +66,44 @@ class ScoringEngine:
         tools: dict[str, str] | None = None,
     ) -> ProjectScore:
         if not file_scores:
-            return ProjectScore(10.0, "healthy", [], findings, tools or {})
-        weights = [max(1.0, fs.metrics.get("nloc", 1.0)) for fs in file_scores]
-        total_weight = sum(weights)
-        score = sum(w * fs.score for w, fs in zip(weights, file_scores)) / total_weight
-        score = round(score, 2)
+            return ProjectScore(
+                median=10.0,
+                grade="excellent",
+                distribution={grade: 0 for grade in GRADES},
+                worst_files=[],
+                best_files=[],
+                files=[],
+                findings=findings,
+                tools=tools or {},
+            )
+        scores = [file.score for file in file_scores]
+        median = round(statistics.median(scores), 2)
+        distribution = {grade: 0 for grade in GRADES}
+        for file in file_scores:
+            distribution[file.grade] += 1
+        worst = sorted(file_scores, key=lambda file: (file.score, file.file))[:5]
+        best = sorted(file_scores, key=lambda file: (-file.score, file.file))[:5]
         return ProjectScore(
-            score=score,
-            band=band_for(score),
+            median=median,
+            grade=grade_for(median),
+            distribution=distribution,
+            worst_files=[_summary(file) for file in worst],
+            best_files=[_summary(file) for file in best],
             files=file_scores,
             findings=findings,
             tools=tools or {},
         )
+
+
+def _summary(file: FileScore) -> FileSummary:
+    top_rules = [
+        rule
+        for rule, _ in Counter(finding.rule for finding in file.findings).most_common(3)
+    ]
+    return FileSummary(
+        file=file.file,
+        score=file.score,
+        grade=file.grade,
+        findings=len(file.findings),
+        top_rules=top_rules,
+    )

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from .config import Config
-from .models import Finding, ProjectScore
+from .models import GRADES, Finding, ProjectScore
 
 EFFORT_WEIGHT = {"S": 1.0, "M": 2.0, "L": 3.0}
 
@@ -40,11 +40,14 @@ class FeedbackEngine:
         self,
         before: ProjectScore,
         after: ProjectScore,
-        threshold: float | None = None,
+        tolerance: float | None = None,
     ) -> dict:
-        threshold = (
-            threshold if threshold is not None else self.config.gate_threshold
+        tolerance = (
+            tolerance
+            if tolerance is not None
+            else self.config.regression_tolerance
         )
+        before_by_file = {file.file: file for file in before.files}
         before_ids = {finding.id for finding in before.findings}
         after_ids = {finding.id for finding in after.findings}
         new = [finding for finding in after.findings if finding.id not in before_ids]
@@ -52,21 +55,55 @@ class FeedbackEngine:
             finding for finding in before.findings if finding.id not in after_ids
         ]
         new_errors = [finding for finding in new if finding.severity == "error"]
-        alert_files = [file for file in after.files if file.band == "alert"]
+        new_bad = [
+            file
+            for file in after.files
+            if file.grade == "bad"
+            and (
+                file.file not in before_by_file
+                or before_by_file[file.file].grade != "bad"
+            )
+        ]
+        regressions = [
+            file
+            for file in after.files
+            if file.file in before_by_file
+            and file.score < before_by_file[file.file].score - tolerance
+        ]
+        distribution_delta = {
+            grade: after.distribution.get(grade, 0)
+            - before.distribution.get(grade, 0)
+            for grade in GRADES
+        }
+        passed = (
+            not new_bad
+            and not regressions
+            and not new_errors
+            and distribution_delta["bad"] <= 0
+            and distribution_delta["poor"] <= 0
+        )
         return {
-            "before": {"score": before.score, "band": before.band},
-            "after": {"score": after.score, "band": after.band},
-            "delta": round(after.score - before.score, 2),
+            "before": {
+                "median": before.median,
+                "grade": before.grade,
+                "distribution": before.distribution,
+            },
+            "after": {
+                "median": after.median,
+                "grade": after.grade,
+                "distribution": after.distribution,
+            },
+            "median_delta": round(after.median - before.median, 2),
+            "distribution_delta": distribution_delta,
+            "new_bad_files": [file.to_dict() for file in new_bad],
+            "regressions": [file.to_dict() for file in regressions],
             "new": [finding.to_dict() for finding in new],
             "resolved": [finding.to_dict() for finding in resolved],
             "gate": {
-                "threshold": threshold,
-                "passed": (
-                    after.score >= threshold
-                    and not new_errors
-                    and not alert_files
-                ),
+                "tolerance": tolerance,
+                "passed": passed,
                 "new_errors": len(new_errors),
-                "alert_files": [file.file for file in alert_files],
+                "new_bad_files": len(new_bad),
+                "regressions": len(regressions),
             },
         }

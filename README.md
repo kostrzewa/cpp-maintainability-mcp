@@ -8,15 +8,16 @@ It runs as a **local stdio process** — no Docker, no hosted service.
 
 ## Features
 
-- **Composite score** with Code Health–style bands: Healthy ≥ 8.0, Warning
-  4.0–8.0, Alert < 4.0.
+- **Composite score** with 5 bands: Excellent ≥ 9.0, Good ≥ 8.0, Fair ≥ 6.0,
+  Poor ≥ 4.0, Bad < 4.0.
 - **Analyzers**: clang-tidy, cppcheck (SARIF), libclang, lizard, duplication,
   header hygiene, cognitive/intent debt, and testability heuristics.
 - **Version-aware tool discovery**: finds `clang-tidy-22`, `clang-22`,
   `llvm-config-22`, and `libclang-22` automatically.
 - **Guide + Verify**: inject conventions before generation, scan the diff after.
-- **Baseline and regression gate**: fail when the score drops, a new error
-  appears, or a file enters the alert band.
+- **Distribution report**: median, 5-band counts, and the 5 worst/best files.
+- **Relative regression gate**: fail on new bad files, file score regressions,
+  or increases in the bad/poor counts.
 - **History**: SQLite scan history for trends.
 - **Graceful degradation**: the pure-Python analyzers keep working when clang
   tools are missing.
@@ -180,11 +181,11 @@ Restart opencode after editing. Verify with `opencode mcp list` or `/mcps`.
 | Tool | Purpose |
 |---|---|
 | `guide` | C++ guidelines, project conventions, and prior findings before generation |
-| `maintainability_scan` | Full or incremental scan; returns score, band, and findings |
-| `maintainability_score` | Score and per-file breakdown only |
+| `maintainability_scan` | Full or incremental scan; returns median, distribution, worst/best files, and findings |
+| `maintainability_score` | Median, 5-band distribution, worst/best files, and per-file breakdown |
 | `explain_finding` | Explain one finding ID and give a suggested fix |
 | `suggest_refactorings` | Top-N highest-impact, lowest-effort refactorings |
-| `compare_revisions` | Compare two paths or `"baseline"` and apply the gate |
+| `compare_revisions` | Compare two paths or `"baseline"` and apply the relative gate |
 | `track_trend` | Recent scan history |
 | `baseline` | Record a snapshot for later comparison |
 
@@ -195,8 +196,8 @@ Restart opencode after editing. Verify with `opencode mcp list` or `/mcps`.
   > "add a parser backend" and follow the returned guidelines.
 
 - **After coding**
-  > Scan the current diff with `maintainability_scan` and summarize the score
-  > and top findings.
+  > Scan the current diff with `maintainability_scan` and summarize the
+  > distribution and worst files.
 
 - **Targeted fixes**
   > Call `suggest_refactorings` on `src/` with budget 3 and apply the smallest
@@ -218,6 +219,30 @@ guide → agent writes C++ → maintainability_scan(diff)
       → repeat until the gate passes
 ```
 
+## Project report
+
+`maintainability_scan` and `maintainability_score` return:
+
+- `median`: the median file score (not an average),
+- `grade`: the 5-band grade of the median,
+- `distribution`: counts for excellent/good/fair/poor/bad,
+- `worst_files`: the 5 lowest-scoring files,
+- `best_files`: the 5 highest-scoring files,
+- `files`: the full per-file breakdown.
+
+## Calibration
+
+Label a sample of files and fit the weights/thresholds:
+
+```sh
+scripts/calibrate.py sample --repo /path/to/cpp-project
+# fill in the "label" field in calibration/labels.json
+scripts/calibrate.py fit --repo /path/to/cpp-project
+```
+
+`fit` runs 5-fold cross-validation, prints a confusion matrix, and writes a
+candidate `calibration/cpp-maintainability.json`.
+
 ## Configuration
 
 The server reads `cpp-maintainability.json` from its working directory (the C++
@@ -230,6 +255,7 @@ project root when `cwd` is omitted). Start from
   "cxx_standard": "c++20",
   "scan_mode": "auto",
   "cppcheck_jobs": 0,
+  "regression_tolerance": 0.5,
   "clean_env": true,
   "clean_env_vars": ["LD_LIBRARY_PATH"]
 }
@@ -254,7 +280,7 @@ project root when `cwd` is omitted). Start from
 | `enabled_analyzers` | all | Subset of `heuristic`, `duplication`, `headers`, `cognitive`, `testability`, `lizard`, `cppcheck`, `clang_tidy`, `libclang` |
 | `weights` | see `config.py` | Per-dimension weights; must sum to 1.0 |
 | `thresholds` | see `config.py` | `(good, bad)` thresholds per dimension |
-| `gate_threshold` | `8.0` | Minimum score for `compare_revisions` |
+| `regression_tolerance` | `0.5` | Allowed file-score drop before the gate fails |
 | `scan_timeout` | `60.0` | Overall scan deadline in seconds |
 | `clang_tidy_timeout` | `120.0` | Per-file clang-tidy timeout in seconds |
 | `cppcheck_timeout` | `60.0` | Per-file cppcheck timeout in seconds |

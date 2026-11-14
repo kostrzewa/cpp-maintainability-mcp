@@ -42,7 +42,7 @@ class HistoryStore:
         self.connection.commit()
 
     def record_scan(
-        self, repo: str, score: float, band: str, payload: dict[str, Any]
+        self, repo: str, median: float, grade: str, payload: dict[str, Any]
     ) -> None:
         with self._lock:
             self.connection.execute(
@@ -51,15 +51,15 @@ class HistoryStore:
                 (
                     repo,
                     datetime.now(UTC).isoformat(),
-                    score,
-                    band,
+                    median,
+                    grade,
                     json.dumps(payload),
                 ),
             )
             self.connection.commit()
 
     def record_baseline(
-        self, repo: str, score: float, payload: dict[str, Any]
+        self, repo: str, median: float, payload: dict[str, Any]
     ) -> None:
         with self._lock:
             self.connection.execute(
@@ -68,7 +68,7 @@ class HistoryStore:
                 (
                     repo,
                     datetime.now(UTC).isoformat(),
-                    score,
+                    median,
                     json.dumps(payload),
                 ),
             )
@@ -85,11 +85,23 @@ class HistoryStore:
     def recent_scans(self, repo: str, limit: int = 20) -> list[dict[str, Any]]:
         with self._lock:
             rows = self.connection.execute(
-                "SELECT id, timestamp, score, band FROM scans "
+                "SELECT id, timestamp, score, band, payload FROM scans "
                 "WHERE repo = ? ORDER BY id DESC LIMIT ?",
                 (repo, limit),
             ).fetchall()
-        return [dict(row) for row in rows]
+        scans = []
+        for row in rows:
+            payload = json.loads(row["payload"])
+            scans.append(
+                {
+                    "id": row["id"],
+                    "timestamp": row["timestamp"],
+                    "median": row["score"],
+                    "grade": row["band"],
+                    "distribution": payload.get("distribution", {}),
+                }
+            )
+        return scans
 
     def recent_findings(self, repo: str, limit: int = 10) -> list[dict[str, Any]]:
         with self._lock:

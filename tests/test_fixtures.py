@@ -48,7 +48,7 @@ class FixtureTests(unittest.TestCase):
                 ],
             )
             self.assertEqual(project.findings, [])
-            self.assertEqual(project.score, 10.0)
+            self.assertEqual(project.median, 10.0)
 
     def test_long_function_is_detected(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -262,12 +262,12 @@ because nobody knows *why* it works.
 Use a **weighted, saturating penalty model**, not a linear sum:
 
 ```
-score(file) = 10 − Σ_d  w_d · penalty_d(file)
+score(file) = 10 − 9 · Σ_d  w_d · penalty_d(file)
 penalty_d   = min(1, max(0, (value_d − good_d) / (bad_d − good_d)))
 ```
 
-- `good_d` / `bad_d` are per-dimension thresholds calibrated to the Code Health
-  bands (Healthy ≥ 8.0, Warning 4.0–8.0, Alert < 4.0).
+- `good_d` / `bad_d` are per-dimension thresholds calibrated to the 5 bands
+  (Excellent ≥ 9.0, Good ≥ 8.0, Fair ≥ 6.0, Poor ≥ 4.0, Bad < 4.0).
 - Weights should reflect the paper's effect sizes: defect risk and maximum
   cycle time are the strongest signals, so complexity, duplication, and
   god-class/god-method penalties should dominate.
@@ -275,19 +275,21 @@ penalty_d   = min(1, max(0, (value_d − good_d) / (bad_d − good_d)))
   not punished for being large.
 - Produce **file-level and function-level** scores; the function level is what
   the agent can act on.
+- Report the project as a **median**, a 5-band distribution, and the 5
+  worst/best files; do not use a project average.
 - Always return the **contributing findings**, not just the number.
 
 ### 5.3 Calibration
 
 1. Start from the paper's bands and the smell taxonomy in [034].
-2. Build a corpus of known-good and known-bad C++ (e.g., Abseil, LLVM, Qt,
-   GoogleTest, plus deliberately degraded variants).
-3. Have humans rate a stratified sample; correlate the score with expert
-   judgement.
-4. Validate predictive power on agentic tasks: does a lower score predict more
-   rework, more test failures, or longer time-to-green?
-5. Recalibrate weights with the observed effect sizes; keep the calibration
-   dataset and script in the repo.
+2. Run `scripts/calibrate.py sample` to draw a stratified sample and write
+   `calibration/labels.json`.
+3. Label the sample with the 5 bands.
+4. Run `scripts/calibrate.py fit` to fit weights/thresholds with 5-fold
+   cross-validation and inspect the confusion matrix.
+5. Validate predictive power on agentic tasks: does a lower score predict more
+   rework, more test failures, or longer time-to-green? Keep the calibration
+   set and script in the repo.
 
 ### 5.4 What not to do
 
@@ -324,11 +326,11 @@ tooling (§4.6):
 | Tool | Mode | Purpose | Key inputs | Output |
 |---|---|---|---|---|
 | `guide` | Guide | Pre-generation context | `paths`, `task`, `standards` | relevant guidelines, conventions, prior findings |
-| `maintainability_scan` | Verify | Full or incremental scan | `paths`, optional `diff`, `config` | score + findings |
-| `maintainability_score` | Verify | Fast score only | `paths` | 1–10 score, band, per-dimension breakdown |
+| `maintainability_scan` | Verify | Full or incremental scan | `paths`, optional `diff`, `config` | median, distribution, worst/best files, findings |
+| `maintainability_score` | Verify | Fast score only | `paths` | median, 5-band distribution, worst/best files, per-file breakdown |
 | `explain_finding` | Verify | Why a finding matters | `finding_id` | rationale, evidence, minimal fix |
 | `suggest_refactorings` | Verify | Ranked, minimal-diff actions | `paths`, `budget` | ordered refactoring plan |
-| `compare_revisions` | Verify | Regression gate | `before`, `after` | delta, new/resolved findings, pass/fail |
+| `compare_revisions` | Verify | Regression gate | `before`, `after` | distribution delta, regressions, pass/fail |
 | `track_trend` | Verify | History over time | `repo`, `window` | score/defect/rework trend |
 | `baseline` | Verify | Snapshot for gating | `repo` | stored baseline |
 
@@ -403,7 +405,7 @@ guide(task, paths)  ──►  standards + conventions + prior findings
 agent writes/edits C++
         │
         ▼
-maintainability_scan(diff)  ──►  findings + score
+maintainability_scan(diff)  ──►  findings + distribution
         │
         ▼
 rank by impact / effort  ──►  top-k actionable findings
@@ -412,9 +414,9 @@ rank by impact / effort  ──►  top-k actionable findings
 agent applies minimal fixes
         │
         ▼
-compare_revisions(before, after)  ──►  delta + gate
+compare_revisions(before, after)  ──►  distribution delta + gate
         │
-        └── repeat until score ≥ threshold or budget exhausted
+        └── repeat until no regressions or budget exhausted
 ```
 
 Guidelines:
@@ -426,8 +428,8 @@ Guidelines:
 - **Actionable fixes.** Each finding should name a concrete refactoring
   (extract function, split class, replace raw loop with algorithm, introduce
   RAII, reduce include fan-out).
-- **Gate on regressions.** Fail if the score drops below the baseline or if a
-  new Alert-band function appears.
+- **Gate on regressions.** Fail on new bad files, file score drops beyond the
+  tolerance, new errors, or increases in the bad/poor counts.
 - **Track process metrics.** Iterations to threshold, score delta per iteration,
   rework rate, time-to-green. These are the agentic analogues of
   Time-in-Development and the DORA metrics [054].
@@ -438,12 +440,12 @@ Guidelines:
 ### 6.5 Caching and performance
 
 - Content-address the cache by file hash + analyzer version + config.
-- Analyse only changed translation units on incremental runs.
+- Analyse only changed files on incremental runs.
 - Run analyzers in subprocesses with timeouts and memory limits.
 - Store history in SQLite (score, findings, commit, timestamp) for trends and
   regression gates.
-- Prefer a fast path (`lizard` + `cppcheck` + duplication) for the inner loop and
-  a slow path (clang-tidy + static analyzer + libclang) for the gate.
+- Prefer the fast project scan (`lizard` + `cppcheck --project -j` + duplication)
+  for the inner loop and a direct scan for the gate.
 
 ### 6.6 Deployment without Docker
 

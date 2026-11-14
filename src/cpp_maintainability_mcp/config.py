@@ -50,6 +50,10 @@ DEFAULT_EXTENSIONS: tuple[str, ...] = (
 DEFAULT_IGNORE: tuple[str, ...] = (
     "build*",
     "third_party",
+    "third-party",
+    "thirdparty",
+    "3rdparty",
+    "3rd-party",
     "vendor",
     "external",
     ".git",
@@ -95,7 +99,7 @@ class Config:
     extensions: tuple[str, ...] = DEFAULT_EXTENSIONS
     ignore_patterns: tuple[str, ...] = DEFAULT_IGNORE
     max_file_bytes: int = 2_000_000
-    gate_threshold: float = 8.0
+    regression_tolerance: float = 0.5
     scan_timeout: float = 60.0
     clang_tidy_timeout: float = 120.0
     cppcheck_timeout: float = 60.0
@@ -129,3 +133,5 @@ class Config:
             raise ValueError(
                 f"scan_mode must be auto, fast, or direct, got {self.scan_mode}"
             )
+        if self.regression_tolerance < 0:
+            raise ValueError("regression_tolerance must be non-negative")

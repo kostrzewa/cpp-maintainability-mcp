@@ -51,8 +51,11 @@ def create_server(engine: MaintainabilityEngine | None = None):
         """Return the composite score and per-file breakdown."""
         project = engine.scan(paths, diff, repo)
         return {
-            "score": project.score,
-            "band": project.band,
+            "median": project.median,
+            "grade": project.grade,
+            "distribution": project.distribution,
+            "worst_files": [summary.to_dict() for summary in project.worst_files],
+            "best_files": [summary.to_dict() for summary in project.best_files],
             "files": [file.to_dict() for file in project.files],
             "tools": project.tools,
         }
@@ -76,11 +79,11 @@ def create_server(engine: MaintainabilityEngine | None = None):
     def compare_revisions(
         before: str,
         after: str,
-        threshold: float | None = None,
+        tolerance: float | None = None,
         repo: str = ".",
     ) -> dict[str, Any]:
         """Compare two revisions (paths or 'baseline') and apply the regression gate."""
-        return engine.compare(before, after, threshold, repo)
+        return engine.compare(before, after, tolerance, repo)
 
     @server.tool()
     def track_trend(repo: str = ".", limit: int = 20) -> dict[str, Any]:

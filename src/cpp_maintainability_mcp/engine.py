@@ -25,7 +25,14 @@ from .config import Config
 from .feedback import FeedbackEngine
 from .guide import GuideEngine
 from .history import HistoryStore
-from .models import DimensionScore, FileScore, Finding, ProjectScore
+from .models import (
+    DimensionScore,
+    FileScore,
+    FileSummary,
+    Finding,
+    ProjectScore,
+    grade_for,
+)
 from .paths import (
     compile_flags_for_file,
     find_compile_commands,
@@ -253,6 +260,7 @@ def _project_from_dict(payload: dict[str, Any]) -> ProjectScore:
             file=item["file"],
             score=item["score"],
             band=item["band"],
+            grade=item.get("grade", grade_for(item["score"])),
             dimensions=[DimensionScore(**d) for d in item.get("dimensions", [])],
             findings=[Finding(**f) for f in item.get("findings", [])],
             metrics=item.get("metrics", {}),
@@ -261,8 +269,11 @@ def _project_from_dict(payload: dict[str, Any]) -> ProjectScore:
     ]
     findings = [Finding(**f) for f in payload.get("findings", [])]
     return ProjectScore(
-        score=payload["score"],
-        band=payload["band"],
+        median=payload["median"],
+        grade=payload["grade"],
+        distribution=payload.get("distribution", {}),
+        worst_files=[FileSummary(**s) for s in payload.get("worst_files", [])],
+        best_files=[FileSummary(**s) for s in payload.get("best_files", [])],
         files=files,
         findings=findings,
         tools=payload.get("tools", {}),
@@ -412,7 +423,9 @@ class MaintainabilityEngine:
 
         project = self.scoring.score_project(file_scores, findings, tools)
         self._last_findings = {finding.id: finding for finding in findings}
-        self.history.record_scan(repo, project.score, project.band, project.to_dict())
+        self.history.record_scan(
+            repo, project.median, project.grade, project.to_dict()
+        )
         return project
 
     def score(
@@ -442,8 +455,8 @@ class MaintainabilityEngine:
     ) -> dict[str, Any]:
         project = self.scan(paths, diff, repo)
         return {
-            "score": project.score,
-            "band": project.band,
+            "median": project.median,
+            "grade": project.grade,
             "suggestions": self.feedback.suggest(project.findings, budget),
         }
 
@@ -451,12 +464,12 @@ class MaintainabilityEngine:
         self,
         before: str,
         after: str,
-        threshold: float | None = None,
+        tolerance: float | None = None,
         repo: str = ".",
     ) -> dict[str, Any]:
         before_score = self._load_or_scan(before, repo)
         after_score = self._load_or_scan(after, repo)
-        return self.feedback.compare(before_score, after_score, threshold)
+        return self.feedback.compare(before_score, after_score, tolerance)
 
     def guide(
         self,
@@ -469,8 +482,8 @@ class MaintainabilityEngine:
 
     def baseline(self, paths: list[str], repo: str = ".") -> dict[str, Any]:
         project = self.scan(paths, repo=repo)
-        self.history.record_baseline(repo, project.score, project.to_dict())
-        return {"repo": repo, "score": project.score, "band": project.band}
+        self.history.record_baseline(repo, project.median, project.to_dict())
+        return {"repo": repo, "median": project.median, "grade": project.grade}
 
     def trend(self, repo: str = ".", limit: int = 20) -> dict[str, Any]:
         return {"repo": repo, "scans": self.history.recent_scans(repo, limit)}

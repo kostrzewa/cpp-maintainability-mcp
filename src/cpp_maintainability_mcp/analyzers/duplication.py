@@ -17,6 +17,41 @@ def _normalize(line: str) -> str:
     return re.sub(r"\s+", " ", line).strip()
 
 
+def _merge_ranges(
+    ranges: list[tuple[int, int, str]],
+) -> list[tuple[int, int, set[str]]]:
+    if not ranges:
+        return []
+    ordered = sorted(ranges)
+    merged: list[tuple[int, int, set[str]]] = []
+    start, end, digest = ordered[0]
+    hashes = {digest}
+    for next_start, next_end, next_digest in ordered[1:]:
+        if next_start <= end + 1:
+            end = max(end, next_end)
+            hashes.add(next_digest)
+        else:
+            merged.append((start, end, hashes))
+            start, end, hashes = next_start, next_end, {next_digest}
+    merged.append((start, end, hashes))
+    return merged
+
+
+def _other_location(
+    file: str,
+    start: int,
+    end: int,
+    hashes: set[str],
+    windows: dict[str, list[tuple[str, int]]],
+) -> tuple[str, int] | None:
+    for digest in hashes:
+        for other_file, other_start in windows[digest]:
+            if other_file == file and start <= other_start <= end:
+                continue
+            return other_file, other_start
+    return None
+
+
 class DuplicationAnalyzer(Analyzer):
     name = "duplication"
 
@@ -44,44 +79,51 @@ class DuplicationAnalyzer(Analyzer):
                 digest = hashlib.sha1("\n".join(block).encode("utf-8")).hexdigest()
                 windows.setdefault(digest, []).append((str(path), i + 1))
 
-        findings = []
+        ranges_by_file: dict[str, list[tuple[int, int, str]]] = {
+            file: [] for file in normalized
+        }
         duplicated: dict[str, set[int]] = {file: set() for file in normalized}
-        for occurrences in windows.values():
+        for digest, occurrences in windows.items():
             if len(occurrences) < 2:
                 continue
-            first_file, first_line = occurrences[0]
-            second_file, second_line = occurrences[1]
-            if first_file == second_file and abs(second_line - first_line) < WINDOW:
-                continue
             for file, line in occurrences:
+                ranges_by_file[file].append((line, line + WINDOW - 1, digest))
                 for offset in range(WINDOW):
                     duplicated[file].add(line + offset)
-            findings.append(
-                make_finding(
-                    file=second_file,
-                    rule="duplicate-block",
-                    dimension="duplication",
-                    severity="warning",
-                    message=(
-                        f"Duplicated {WINDOW}-line block also at "
-                        f"{first_file}:{first_line}."
-                    ),
-                    start_line=second_line,
-                    end_line=second_line + WINDOW - 1,
-                    evidence={
-                        "other": f"{first_file}:{first_line}",
-                        "window": WINDOW,
-                    },
-                    suggested_fix=(
-                        "Extract the duplicated block into a shared function, "
-                        "template, or algorithm."
-                    ),
-                    impact={"defects": 0.4, "time": 0.6, "predictability": 0.4},
-                    effort="M",
-                    confidence=0.9,
-                    analyzer=self.name,
+
+        findings = []
+        for file, ranges in ranges_by_file.items():
+            for start, end, hashes in _merge_ranges(ranges):
+                other = _other_location(file, start, end, hashes, windows)
+                if other is None:
+                    continue
+                other_file, other_start = other
+                findings.append(
+                    make_finding(
+                        file=file,
+                        rule="duplicate-block",
+                        dimension="duplication",
+                        severity="warning",
+                        message=(
+                            f"Duplicated {end - start + 1}-line block also at "
+                            f"{other_file}:{other_start}."
+                        ),
+                        start_line=start,
+                        end_line=end,
+                        evidence={
+                            "other": f"{other_file}:{other_start}",
+                            "lines": end - start + 1,
+                        },
+                        suggested_fix=(
+                            "Extract the duplicated block into a shared function, "
+                            "template, or algorithm."
+                        ),
+                        impact={"defects": 0.4, "time": 0.6, "predictability": 0.4},
+                        effort="M",
+                        confidence=0.9,
+                        analyzer=self.name,
+                    )
                 )
-            )
 
         results: dict[str, AnalysisResult] = {}
         for file, norm in normalized.items():

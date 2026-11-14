@@ -8,6 +8,7 @@ from typing import Any
 
 SEVERITIES = ("info", "warning", "error")
 BANDS = ("healthy", "warning", "alert")
+GRADES = ("excellent", "good", "fair", "poor", "bad")
 
 
 def band_for(score: float) -> str:
@@ -16,6 +17,18 @@ def band_for(score: float) -> str:
     if score >= 4.0:
         return "warning"
     return "alert"
+
+
+def grade_for(score: float) -> str:
+    if score >= 9.0:
+        return "excellent"
+    if score >= 8.0:
+        return "good"
+    if score >= 6.0:
+        return "fair"
+    if score >= 4.0:
+        return "poor"
+    return "bad"
 
 
 def finding_id(file: str, rule: str, line: int, message: str) -> str:
@@ -110,6 +123,7 @@ class FileScore:
     file: str
     score: float
     band: str
+    grade: str
     dimensions: list[DimensionScore]
     findings: list[Finding]
     metrics: dict[str, float] = field(default_factory=dict)
@@ -119,6 +133,7 @@ class FileScore:
             "file": self.file,
             "score": self.score,
             "band": self.band,
+            "grade": self.grade,
             "dimensions": [d.to_dict() for d in self.dimensions],
             "findings": [f.to_dict() for f in self.findings],
             "metrics": self.metrics,
@@ -126,18 +141,36 @@ class FileScore:
 
 
 @dataclass
-class ProjectScore:
+class FileSummary:
+    file: str
     score: float
-    band: str
+    grade: str
+    findings: int
+    top_rules: list[str]
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
+class ProjectScore:
+    median: float
+    grade: str
+    distribution: dict[str, int]
+    worst_files: list[FileSummary]
+    best_files: list[FileSummary]
     files: list[FileScore]
     findings: list[Finding]
     tools: dict[str, str] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return {
-            "score": self.score,
-            "band": self.band,
-            "files": [f.to_dict() for f in self.files],
-            "findings": [f.to_dict() for f in self.findings],
+            "median": self.median,
+            "grade": self.grade,
+            "distribution": self.distribution,
+            "worst_files": [summary.to_dict() for summary in self.worst_files],
+            "best_files": [summary.to_dict() for summary in self.best_files],
+            "files": [file.to_dict() for file in self.files],
+            "findings": [finding.to_dict() for finding in self.findings],
             "tools": self.tools,
         }
