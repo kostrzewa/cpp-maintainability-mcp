@@ -1,0 +1,1745 @@
+[
+  {
+    "index": 1,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W3148356943",
+    "authors": [
+      "Abdullah Al-Boghdady",
+      "Khaled Tawfik Wassif",
+      "Mohammad El‐Ramly"
+    ],
+    "year": 2021,
+    "title": "The Presence, Trends, and Causes of Security Vulnerabilities in Operating Systems of IoT’s Low-End Devices",
+    "venue": "Sensors",
+    "doi": "10.3390/s21072329",
+    "type": "article",
+    "oa_urls": [
+      "https://www.mdpi.com/1424-8220/21/7/2329/pdf?version=1617937261"
+    ],
+    "url": null,
+    "raw": "Al-Boghdady et al. (2021) Abdullah Al-Boghdady, Khaled Wassif, and Mohammad El-Ramly. 2021. The Presence, Trends, and Causes of Security Vulnerabilities in Operating Systems of IoT’s Low-End Devices. *Sensors* 21, 7 (2021), 2329."
+  },
+  {
+    "index": 2,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W3110313569",
+    "authors": [
+      "Kalev Alpernas",
+      "Yotam M. Y. Feldman",
+      "Hila Peleg"
+    ],
+    "year": 2020,
+    "title": "The wonderful wizard of LoC: paying attention to the man behind the curtain of lines-of-code metrics",
+    "venue": "ACM SIGPLAN International Symposium on New Ideas, New Paradigms, and Reflections on Programming and Software (Onward!)",
+    "doi": "10.1145/3426428.3426921",
+    "type": "conference-paper",
+    "oa_urls": [
+      "https://dl.acm.org/doi/pdf/10.1145/3426428.3426921"
+    ],
+    "url": null,
+    "raw": "Alpernas et al. (2020) Kalev Alpernas, Yotam MY Feldman, and Hila Peleg. 2020. The wonderful wizard of LoC: paying attention to the man behind the curtain of lines-of-code metrics. In *Proc. of the 2020 ACM SIGPLAN International Symposium on New Ideas, New Paradigms, and Reflections on Programming and Software*. 146–156."
+  },
+  {
+    "index": 3,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2202602917",
+    "authors": [
+      "Areti Ampatzoglou",
+      "Apostolos Ampatzoglou",
+      "Alexander Chatzigeorgiou",
+      "Paris Avgeriou"
+    ],
+    "year": 2015,
+    "title": "The financial aspect of managing technical debt: A systematic literature review",
+    "venue": "Information and Software Technology",
+    "doi": "10.1016/j.infsof.2015.04.001",
+    "type": "review",
+    "oa_urls": [
+      "https://www.sciencedirect.com/science/article/pii/S0950584915000762"
+    ],
+    "url": null,
+    "raw": "Ampatzoglou et al. (2015) Areti Ampatzoglou, Apostolos Ampatzoglou, Alexander Chatzigeorgiou, and Paris Avgeriou. 2015. The financial aspect of managing technical debt: A systematic literature review. *Information and Software Technology* 64 (2015), 52–73."
+  },
+  {
+    "index": 4,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2100196534",
+    "authors": [
+      "Jorge Aranda",
+      "Gina Danielle Venolia"
+    ],
+    "year": 2009,
+    "title": "The secret life of bugs: Going past the errors and omissions in software repositories",
+    "venue": "ACM/IEEE International Conference on Software Engineering: Companion Proceedings (ICSE-Companion)",
+    "doi": "10.1109/icse.2009.5070530",
+    "type": "conference-paper",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Aranda and Venolia (2009) Jorge Aranda and Gina Venolia. 2009. The secret life of bugs: Going past the errors and omissions in software repositories. In *Proc. of the 31st International Conference on Software Engineering*. 298–308."
+  },
+  {
+    "index": 5,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2058690162",
+    "authors": [
+      "Robert Baggen",
+      "José Pedro Correia",
+      "Katrin Schill",
+      "Joost Visser"
+    ],
+    "year": 2012,
+    "title": "Standardized code quality benchmarking for improving software maintainability",
+    "venue": "Software Quality Journal",
+    "doi": "10.1007/s11219-011-9144-9",
+    "type": "article",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Baggen et al. (2012) Robert Baggen, José Pedro Correia, Katrin Schill, and Joost Visser. 2012. Standardized code quality benchmarking for improving software maintainability. *Software Quality Journal* 2 (2012), 287–307."
+  },
+  {
+    "index": 6,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2913200795",
+    "authors": [
+      "Emery D. Berger",
+      "Celeste Hollenbeck",
+      "Petr Maj",
+      "Olga Vitek",
+      "Jan Vitek"
+    ],
+    "year": 2019,
+    "title": "On the Impact of Programming Languages on Code Quality: A Reproduction Study",
+    "venue": "ACM Transactions on Programming Languages and Systems",
+    "doi": "10.1145/3340571",
+    "type": "article",
+    "oa_urls": [
+      "https://dl.acm.org/doi/pdf/10.1145/3340571",
+      "https://arxiv.org/pdf/1901.10220"
+    ],
+    "url": null,
+    "raw": "Berger et al. (2019) Emery D Berger, Celeste Hollenbeck, Petr Maj, Olga Vitek, and Jan Vitek. 2019. On the impact of programming languages on code quality: a reproduction study. *ACM Transactions on Programming Languages and Systems* 41, 4 (2019), 1–24."
+  },
+  {
+    "index": 7,
+    "source": "manual",
+    "openalex_id": null,
+    "authors": [
+      "David Scott Bernstein"
+    ],
+    "year": 2015,
+    "title": "Beyond Legacy Code: Nine Practices to Extend the Life (and Value) of Your Software",
+    "venue": "Pragmatic Bookshelf",
+    "doi": null,
+    "type": "book",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Bernstein (2015) David Scott Bernstein. 2015. *Beyond legacy code: nine practices to extend the life (and value) of your software*. Pragmatic Bookshelf."
+  },
+  {
+    "index": 8,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2767599271",
+    "authors": [
+      "Terese Besker",
+      "Antonio Martini",
+      "Jan Bosch"
+    ],
+    "year": 2017,
+    "title": "The Pricey Bill of Technical Debt: When and by Whom will it be Paid?",
+    "venue": "IEEE International Conference on Software Maintenance (ICSM)",
+    "doi": "10.1109/icsme.2017.42",
+    "type": "conference-paper",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Besker et al. (2017) Terese Besker, Antonio Martini, and Jan Bosch. 2017. The pricey bill of technical debt: When and by whom will it be paid?. In *Proc. of the International Conference on Software Maintenance and Evolution*. 13–23."
+  },
+  {
+    "index": 9,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2883571047",
+    "authors": [
+      "Terese Besker",
+      "Antonio Martini",
+      "Jan Bosch"
+    ],
+    "year": 2018,
+    "title": "Technical debt cripples software developer productivity: a longitudinal study on developers' daily software development work",
+    "venue": "IEEE/ACM International Conference on Technical Debt (TechDebt)",
+    "doi": "10.1145/3194164.3194178",
+    "type": "conference-paper",
+    "oa_urls": [
+      "https://www.duo.uio.no/bitstream/10852/73978/2/ICSE-CE-TechDebt-40.pdf"
+    ],
+    "url": null,
+    "raw": "Besker et al. (2018) Terese Besker, Antonio Martini, and Jan Bosch. 2018. Technical debt cripples software developer productivity: a longitudinal study on developers’ daily software development work. In *Proc. of the International Conference on Technical Debt*. 105–114."
+  },
+  {
+    "index": 10,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2949102124",
+    "authors": [
+      "Terese Besker",
+      "Antonio Martini",
+      "Jan Bosch"
+    ],
+    "year": 2019,
+    "title": "Software developer productivity loss due to technical debt—A replication and extension study examining developers’ development work",
+    "venue": "Journal of Systems and Software",
+    "doi": "10.1016/j.jss.2019.06.004",
+    "type": "article",
+    "oa_urls": [
+      "https://research.chalmers.se/publication/511450/file/511450_Fulltext.pdf"
+    ],
+    "url": null,
+    "raw": "Besker et al. (2019) Terese Besker, Antonio Martini, and Jan Bosch. 2019. Software developer productivity loss due to technical debt—a replication and extension study examining developers’ development work. *Journal of Systems and Software* 156 (2019), 41–61."
+  },
+  {
+    "index": 11,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W3030100686",
+    "authors": [
+      "Markus Borg",
+      "Joakim Wernberg",
+      "Thomas Olsson",
+      "Ulrik Franke",
+      "Martin Andersson"
+    ],
+    "year": 2020,
+    "title": "Illuminating a Blind Spot in Digitalization - Software Development in Sweden's Private and Public Sector",
+    "venue": "International Conference on Software Engineering Workshops (ICSEW)",
+    "doi": "10.1145/3387940.3392213",
+    "type": "conference-paper",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2005.12607"
+    ],
+    "url": null,
+    "raw": "Borg et al. (2020) Markus Borg, Joakim Wernberg, Thomas Olsson, Ulrik Franke, and Martin Andersson. 2020. Illuminating a Blind Spot in Digitalization-Software Development in Sweden’s Private and Public Sector. In *Proc. of the 42nd International Conference on Software Engineering Workshops*. 299–302."
+  },
+  {
+    "index": 12,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W3195595279",
+    "authors": [
+      "Klara Borowa",
+      "Andrzej Zalewski",
+      "Adam Saczko"
+    ],
+    "year": 2021,
+    "title": "Living With Technical Debt—A Perspective From the Video Game Industry",
+    "venue": "IEEE Software",
+    "doi": "10.1109/ms.2021.3103249",
+    "type": "article",
+    "oa_urls": [
+      "https://ieeexplore.ieee.org/stampPDF/getPDF.jsp?tp=&arnumber=9508260",
+      "https://ieeexplore.ieee.org/ielx7/52/9585138/09508260.pdf"
+    ],
+    "url": null,
+    "raw": "Borowa et al. (2021) Klara Borowa, Andrzej Zalewski, and Adam Saczko. 2021. Living With Technical Debt—A Perspective From the Video Game Industry. *IEEE Software* 38, 06 (2021), 65–70."
+  },
+  {
+    "index": 13,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W3174293612",
+    "authors": [
+      "Travis D. Breaux",
+      "Jennifer Moritz"
+    ],
+    "year": 2021,
+    "title": "The 2021 software developer shortage is coming",
+    "venue": "Communications of the ACM",
+    "doi": "10.1145/3440753",
+    "type": "article",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Breaux and Moritz (2021) Travis Breaux and Jennifer Moritz. 2021. The 2021 software developer shortage is coming. *Commun. ACM* 64, 7 (2021), 39–41."
+  },
+  {
+    "index": 14,
+    "source": "manual",
+    "openalex_id": null,
+    "authors": [
+      "Lily Bryant",
+      "Ricardo Rodriguez",
+      "Zev Isert",
+      "Hunter Watson",
+      "Amy Hanvoravongchai"
+    ],
+    "year": 2019,
+    "title": "Bokeh - Documentation",
+    "venue": "University of Victoria, Canada",
+    "doi": null,
+    "type": "report",
+    "oa_urls": [],
+    "url": "https://github.com/SENG480/UVicDSA19/blob/master/manuscript/Bokeh/chapter.md",
+    "raw": "Bryant et al. (2019) Lily Bryant, Ricardo Rodriguez, Zev Isert, Hunter Watson, and Amy Hanvoravongchai. 2019. *Bokeh - Documentation*. Technical Report. Univeristy of Victoria, Canada. [https://github.com/SENG480/UVicDSA19/blob/master/manuscript/Bokeh/chapter.md](https://github.com/SENG480/UVicDSA19/blob/master/manuscript/Bokeh/chapter.md)"
+  },
+  {
+    "index": 15,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2898052942",
+    "authors": [
+      "Rudolf N. Cardinal",
+      "Michael R. F. Aitken"
+    ],
+    "year": 2013,
+    "title": "ANOVA for the Behavioral Sciences Researcher",
+    "venue": "Psychology Press eBooks",
+    "doi": "10.4324/9780203763933",
+    "type": "book",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Cardinal and Aitken (2013) Rudolf N Cardinal and Michael RF Aitken. 2013. *ANOVA for the behavioral sciences researcher*. Psychology Press."
+  },
+  {
+    "index": 16,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2130418016",
+    "authors": [
+      "Sheldon Cohen"
+    ],
+    "year": 1980,
+    "title": "Aftereffects of stress on human performance and social behavior: A review of research and theory.",
+    "venue": "Psychological Bulletin",
+    "doi": "10.1037/0033-2909.88.1.82",
+    "type": "article",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Cohen (1980) Sheldon Cohen. 1980. Aftereffects of stress on human performance and social behavior: a review of research and theory. *Psychological Bulletin* 88, 1 (1980), 82."
+  },
+  {
+    "index": 17,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W3093149350",
+    "authors": [
+      "Rodrigo Reboucas de Almeida",
+      "Rafael do Nascimento Ribeiro",
+      "Christoph Treude",
+      "Uirá Kulesza"
+    ],
+    "year": 2021,
+    "title": "Business-Driven Technical Debt Prioritization: An Industrial Case Study",
+    "venue": "IEEE/ACM International Conference on Technical Debt (TechDebt)",
+    "doi": "10.1109/techdebt52882.2021.00017",
+    "type": "conference-paper",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2010.09711"
+    ],
+    "url": null,
+    "raw": "de Almeida et al. (2021) Rodrigo Rebouças de Almeida, Rafael do Nascimento Ribeiro, Christoph Treude, and Uirá Kulesza. 2021. Business-driven technical debt prioritization: An industrial case study. In *Proc. of the International Conference on Technical Debt*. 74–83."
+  },
+  {
+    "index": 18,
+    "source": "manual",
+    "openalex_id": null,
+    "authors": [
+      "Rodrigo Reboucas de Almeida",
+      "Christoph Treude",
+      "Uira Kulesza"
+    ],
+    "year": 2019,
+    "title": "Tracy: A Business-Driven Technical Debt Prioritization Framework",
+    "venue": "International Conference on Software Maintenance and Evolution (ICSME)",
+    "doi": "10.1109/ICSME.2019.00028",
+    "type": "conference-paper",
+    "oa_urls": [
+      "https://arxiv.org/pdf/1908.00150"
+    ],
+    "url": null,
+    "raw": "de Almeida et al. (2019) Rodrigo Rebouças de Almeida, Christoph Treude, and Uirá Kulesza. 2019. Tracy: A business-driven technical debt prioritization framework. In *Proc. of the International Conference on Software Maintenance and Evolution*. 181–185."
+  },
+  {
+    "index": 19,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W1560538771",
+    "authors": [
+      "Florian Deissenboeck",
+      "Markus Pizka"
+    ],
+    "year": 2007,
+    "title": "The Economic Impact of Software Process Variations",
+    "venue": "Springer eBooks",
+    "doi": "10.1007/978-3-540-72426-1_22",
+    "type": "conference-paper",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Deissenboeck and Pizka (2007) Florian Deissenboeck and Markus Pizka. 2007. The economic impact of software process variations. In *Proc. of the International Conference on Software Process*. Springer, 259–271."
+  },
+  {
+    "index": 20,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W3017270814",
+    "authors": [
+      "Christof Ebert",
+      "Anh Kim",
+      "Jeroen van Genuchten"
+    ],
+    "year": 2020,
+    "title": "Technology Trends: Winning With ACES",
+    "venue": "IEEE Software",
+    "doi": "10.1109/ms.2020.2973251",
+    "type": "article",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Ebert et al. (2020) Christof Ebert, Anh Kim, and Jeroen van Genuchten. 2020. Technology trends: Winning with ACES. *IEEE Software* 37, 3 (2020), 6–13."
+  },
+  {
+    "index": 21,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2015187825",
+    "authors": [
+      "Neil Ernst",
+      "Stephany Bellomo",
+      "İpek Özkaya",
+      "Robert L. Nord",
+      "Ian Gorton"
+    ],
+    "year": 2015,
+    "title": "Measure it? Manage it? Ignore it? software practitioners and technical debt",
+    "venue": "ACM Joint European Software Engineering Conference and Symposium on the Foundations of Software Engineering (ESEC/FSE)",
+    "doi": "10.1145/2786805.2786848",
+    "type": "conference-paper",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Ernst et al. (2015) Neil A Ernst, Stephany Bellomo, Ipek Ozkaya, Robert L Nord, and Ian Gorton. 2015. Measure it? manage it? ignore it? software practitioners and technical debt. In *Proc. of the 10th Joint Meeting on Foundations of Software Engineering*. 50–60."
+  },
+  {
+    "index": 22,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2122000464",
+    "authors": [
+      "Norman Fenton"
+    ],
+    "year": 1994,
+    "title": "Software measurement: a necessary scientific basis",
+    "venue": "IEEE Transactions on Software Engineering",
+    "doi": "10.1109/32.268921",
+    "type": "article",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Fenton (1994) Norman Fenton. 1994. Software measurement: A necessary scientific basis. *IEEE Transactions on Software Engineering* 20, 3 (1994), 199–206."
+  },
+  {
+    "index": 23,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W3163423879",
+    "authors": [
+      "Sávio Freire",
+      "Nicolli Rios",
+      "Boris Pérez",
+      "Darío Ernesto Correal Torres",
+      "Manoel Mendonça",
+      "Clemente I. Izurieta",
+      "Carolyn Budinger Seaman",
+      "Rodrigo Oliveira Spinola"
+    ],
+    "year": 2021,
+    "title": "How do Technical Debt Payment Practices Relate to the Effects of the Presence of Debt Items in Software Projects?",
+    "venue": "IEEE International Conference on Software Analysis, Evolution and Reengineering (SANER)",
+    "doi": "10.1109/saner50967.2021.00074",
+    "type": "conference-paper",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Freire et al. (2021) Sávio Freire, Nicolli Rios, Boris Pérez, Darío Torres, Manoel Mendonça, Clemente Izurieta, Carolyn Seaman, and Rodrigo Spínola. 2021. How do technical debt payment practices relate to the effects of the presence of debt items in software projects?. In *Proc. of the International Conference on Software Analysis, Evolution and Reengineering*. 605–609."
+  },
+  {
+    "index": 24,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2270985711",
+    "authors": [
+      "Carmine Giardino",
+      "Nicolò Paternoster",
+      "Michael Unterkalmsteiner",
+      "Tony Gorschek",
+      "Pekka Abrahamsson"
+    ],
+    "year": 2015,
+    "title": "Software Development in Startup Companies: The Greenfield Startup Model",
+    "venue": "IEEE Transactions on Software Engineering",
+    "doi": "10.1109/tse.2015.2509970",
+    "type": "article",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2308.09438"
+    ],
+    "url": null,
+    "raw": "Giardino et al. (2015) Carmine Giardino, Nicolo Paternoster, Michael Unterkalmsteiner, Tony Gorschek, and Pekka Abrahamsson. 2015. Software development in startup companies: the greenfield startup model. *IEEE Transactions on Software Engineering* 42, 6 (2015), 585–604."
+  },
+  {
+    "index": 25,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W1535381460",
+    "authors": [
+      "Robert L. Glass"
+    ],
+    "year": 2002,
+    "title": "Facts and fallacies of software engineering",
+    "venue": "Addison-Wesley Professional",
+    "doi": null,
+    "type": "article",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Glass (2002) Robert L Glass. 2002. *Facts and Fallacies of Software Engineering*. Addison-Wesley Professional."
+  },
+  {
+    "index": 26,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2070437629",
+    "authors": [
+      "Yuepu Guo",
+      "Carolyn Budinger Seaman",
+      "Rebeka Gomes",
+      "Antonio Cavalcanti",
+      "Graziela Tonin",
+      "Fábio Q. B. da Silva",
+      "André L. M. Santos",
+      "Clauirton Siebra"
+    ],
+    "year": 2011,
+    "title": "Tracking technical debt — An exploratory case study",
+    "venue": "IEEE International Conference on Software Maintenance (ICSM)",
+    "doi": "10.1109/icsm.2011.6080824",
+    "type": "conference-paper",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Guo et al. (2011) Yuepu Guo, Carolyn Seaman, Rebeka Gomes, Antonio Cavalcanti, Graziela Tonin, Fabio QB Da Silva, Andre LM Santos, and Clauirton Siebra. 2011. Tracking technical debt—An exploratory case study. In *Proc. of the 27th International Conference on Software Maintenance*. 528–531."
+  },
+  {
+    "index": 27,
+    "source": "manual",
+    "openalex_id": null,
+    "authors": [
+      "Miguel Hernan",
+      "James Robins"
+    ],
+    "year": 2020,
+    "title": "Causal Inference: What If",
+    "venue": "Chapman & Hall/CRC",
+    "doi": null,
+    "type": "book",
+    "oa_urls": [],
+    "url": "https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/",
+    "raw": "Hernán and Robins (2020) M. Hernán and J. Robins. 2020. *Causal inference: What if*. Chapman & Hall/CRC, Boca Raton, FL, USA."
+  },
+  {
+    "index": 28,
+    "source": "manual",
+    "openalex_id": null,
+    "authors": [
+      "Jez Humble",
+      "Gene Kim"
+    ],
+    "year": 2018,
+    "title": "Accelerate: The Science of Lean Software and DevOps: Building and Scaling High Performing Technology Organizations",
+    "venue": "IT Revolution",
+    "doi": null,
+    "type": "book",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Humble and Kim (2018) Jez Humble and Gene Kim. 2018. *Accelerate: The science of lean software and devops: Building and scaling high performing technology organizations*. IT Revolution."
+  },
+  {
+    "index": 29,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W3208255427",
+    "authors": [
+      "Sonja M. Hyrynsalmi",
+      "Minna M. Rantanen",
+      "Sami Hyrynsalmi"
+    ],
+    "year": 2021,
+    "title": "The War for Talent in Software Business - How are Finnish software companies perceiving and coping with the labor shortage?",
+    "venue": "IEEE International Conference on Engineering, Technology and Innovation (ICE/ITMC)",
+    "doi": "10.1109/ice/itmc52061.2021.9570207",
+    "type": "conference-paper",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Hyrynsalmi et al. (2021) Sonja M Hyrynsalmi, Minna M Rantanen, and Sami Hyrynsalmi. 2021. The War for Talent in Software Business-How are Finnish software companies perceiving and coping with the labor shortage?. In *Proc. of the International Conference on Engineering, Technology and Innovation*. 1–10."
+  },
+  {
+    "index": 30,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2009786711",
+    "authors": [
+      "Ekrem Kocagüneli",
+      "Tim Menzies",
+      "Jacky Keung"
+    ],
+    "year": 2011,
+    "title": "On the Value of Ensemble Effort Estimation",
+    "venue": "IEEE Transactions on Software Engineering",
+    "doi": "10.1109/tse.2011.111",
+    "type": "article",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Kocaguneli et al. (2011) Ekrem Kocaguneli, Tim Menzies, and Jacky W Keung. 2011. On the value of ensemble effort estimation. *IEEE Transactions on Software Engineering* 38, 6 (2011), 1403–1416."
+  },
+  {
+    "index": 31,
+    "source": "manual",
+    "openalex_id": null,
+    "authors": [
+      "Herb Krasner"
+    ],
+    "year": 2018,
+    "title": "The Cost of Poor Quality Software in the US: A 2018 Report",
+    "venue": "Consortium for IT Software Quality",
+    "doi": null,
+    "type": "report",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Krasner (2018) Herb Krasner. 2018. The cost of poor quality software in the US: A 2018 report. *Consortium for IT Software Quality, Tech. Rep* 10 (2018)."
+  },
+  {
+    "index": 32,
+    "source": "manual",
+    "openalex_id": null,
+    "authors": [
+      "Philippe Kruchten",
+      "Robert Nord",
+      "Ipek Ozkaya"
+    ],
+    "year": 2019,
+    "title": "Managing Technical Debt: Reducing Friction in Software Development",
+    "venue": "Addison-Wesley Professional",
+    "doi": null,
+    "type": "book",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Kruchten et al. (2019) Philippe Kruchten, Robert Nord, and Ipek Ozkaya. 2019. *Managing Technical Debt: Reducing Friction in Software Development*. Addison-Wesley Professional."
+  },
+  {
+    "index": 33,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2999173898",
+    "authors": [
+      "Miikka Kuutila",
+      "Mika Mäntylä",
+      "Umar Farooq",
+      "Maëlick Claes"
+    ],
+    "year": 2020,
+    "title": "Time pressure in software engineering: A systematic review",
+    "venue": "Information and Software Technology",
+    "doi": "10.1016/j.infsof.2020.106257",
+    "type": "review",
+    "oa_urls": [
+      "https://arxiv.org/pdf/1901.05771"
+    ],
+    "url": null,
+    "raw": "Kuutila et al. (2020) Miikka Kuutila, Mika Mäntylä, Umar Farooq, and Maelick Claes. 2020. Time pressure in software engineering: A systematic review. *Information and Software Technology* 121 (2020), 106257."
+  },
+  {
+    "index": 34,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W3020617474",
+    "authors": [
+      "Guilherme Lacerda",
+      "Fábio dos Santos Petrillo",
+      "Marcelo Soares Pimenta",
+      "Yann‐Gaël Guéhéneuc"
+    ],
+    "year": 2020,
+    "title": "Code smells and refactoring: A tertiary systematic review of challenges and observations",
+    "venue": "Journal of Systems and Software",
+    "doi": "10.1016/j.jss.2020.110610",
+    "type": "review",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2004.10777"
+    ],
+    "url": null,
+    "raw": "Lacerda et al. (2020) Guilherme Lacerda, Fabio Petrillo, Marcelo Pimenta, and Yann Gaël Guéhéneuc. 2020. Code smells and refactoring: A tertiary systematic review of challenges and observations. *Journal of Systems and Software* 167 (2020), 110610."
+  },
+  {
+    "index": 35,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2118052532",
+    "authors": [
+      "David Laibson"
+    ],
+    "year": 1997,
+    "title": "Golden Eggs and Hyperbolic Discounting",
+    "venue": "The Quarterly Journal of Economics",
+    "doi": "10.1162/003355397555253",
+    "type": "article",
+    "oa_urls": [
+      "http://dash.harvard.edu/bitstream/handle/1/4481499/Laibson_GoldenEggs.pdf",
+      "https://dash.harvard.edu/bitstream/1/4481499/2/Laibson_GoldenEggs.pdf"
+    ],
+    "url": null,
+    "raw": "Laibson (1997) David Laibson. 1997. Golden eggs and hyperbolic discounting. *The Quarterly Journal of Economics* 112, 2 (1997), 443–478."
+  },
+  {
+    "index": 36,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W3208221124",
+    "authors": [
+      "Valentina Lenarduzzi",
+      "Antonio Martini",
+      "Nyyti Saarimäki",
+      "Damian A. Tamburri"
+    ],
+    "year": 2021,
+    "title": "Technical Debt Impacting Lead-Times: An Exploratory Study",
+    "venue": "Euromicro Conference on Software Engineering and Advanced Applications (SEAA)",
+    "doi": "10.1109/seaa53835.2021.00032",
+    "type": "conference-paper",
+    "oa_urls": [
+      "https://www.duo.uio.no/bitstream/10852/92702/1/2021_Euromicro_TD_LeadTime%2b%25282%2529-kopi.pdf"
+    ],
+    "url": null,
+    "raw": "Lenarduzzi et al. (2021) Valentina Lenarduzzi, Antonio Martini, Nyyti Saarimäki, and Damian Andrew Tamburri. 2021. Technical Debt Impacting Lead-Times: An Exploratory Study. In *Proc. of the 47th Euromicro Conference on Software Engineering and Advanced Applications*. 188–195."
+  },
+  {
+    "index": 37,
+    "source": "manual",
+    "openalex_id": null,
+    "authors": [
+      "Eric Lesser",
+      "Linda Ban"
+    ],
+    "year": 2016,
+    "title": "How Leading Companies Practice Software Development and Delivery to Achieve a Competitive Edge",
+    "venue": "Strategy & Leadership",
+    "doi": null,
+    "type": "journal",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Lesser and Ban (2016) Eric Lesser and Linda Ban. 2016. How leading companies practice software development and delivery to achieve a competitive edge. *Strategy & Leadership* (2016)."
+  },
+  {
+    "index": 38,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2794770536",
+    "authors": [
+      "Antonio Martini",
+      "Terese Besker",
+      "Jan Bosch"
+    ],
+    "year": 2018,
+    "title": "Technical Debt tracking: Current state of practice",
+    "venue": "Science of Computer Programming",
+    "doi": "10.1016/j.scico.2018.03.007",
+    "type": "article",
+    "oa_urls": [
+      "https://www.sciencedirect.com/science/article/pii/S0167642318301035/pdf"
+    ],
+    "url": null,
+    "raw": "Martini et al. (2018) Antonio Martini, Terese Besker, and Jan Bosch. 2018. Technical debt tracking: Current state of practice: A survey and multiple case study in 15 large organizations. *Science of Computer Programming* 163 (2018), 42–61."
+  },
+  {
+    "index": 39,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W177261742",
+    "authors": [
+      "Steve McConnell"
+    ],
+    "year": 2006,
+    "title": "Software Estimation: Demystifying the Black Art",
+    "venue": "Microsoft Press",
+    "doi": null,
+    "type": "book",
+    "oa_urls": [],
+    "url": null,
+    "raw": "McConnell (2006) Steve McConnell. 2006. *Software estimation: demystifying the black art*. Microsoft press."
+  },
+  {
+    "index": 40,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2005772639",
+    "authors": [
+      "Gisela Mohr",
+      "Hans‐Joachim Wolfram"
+    ],
+    "year": 2010,
+    "title": "Stress among managers: The importance of dynamic tasks, predictability, and social support in unpredictable times.",
+    "venue": "Journal of Occupational Health Psychology",
+    "doi": "10.1037/a0018892",
+    "type": "article",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Mohr and Wolfram (2010) Gisela Mohr and Hans-Joachim Wolfram. 2010. Stress among managers: The importance of dynamic tasks, predictability, and social support in unpredictable times. *Journal of Occupational Health Psychology* 15, 2 (2010), 167."
+  },
+  {
+    "index": 41,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2139855137",
+    "authors": [
+      "Nachiappan Nagappan",
+      "Thomas Brendan Murphy",
+      "Victor Robert Basili"
+    ],
+    "year": 2008,
+    "title": "The influence of organizational structure on software quality: an empirical case study",
+    "venue": "ACM/IEEE International Conference on Software Engineering: Companion Proceedings (ICSE-Companion)",
+    "doi": "10.1145/1368088.1368160",
+    "type": "conference-paper",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Nagappan et al. (2008) Nachiappan Nagappan, Brendan Murphy, and Victor Basili. 2008. The influence of organizational structure on software quality. In *Proc. of the 30th International Conference on Software Engineering*. 521–530."
+  },
+  {
+    "index": 42,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2115860381",
+    "authors": [
+      "Markus Neuhäuser",
+      "Frank Bretz"
+    ],
+    "year": 2001,
+    "title": "Nonparametric All-Pairs Multiple Comparisons",
+    "venue": "Biometrical Journal",
+    "doi": "10.1002/1521-4036(200109)43:5<571::aid-bimj571>3.0.co;2-n",
+    "type": "article",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Neuhäuser and Bretz (2001) Markus Neuhäuser and Frank Bretz. 2001. Nonparametric all-pairs multiple comparisons. *Biometrical Journal: Journal of Mathematical Methods in Biosciences* 43, 5 (2001), 571–580."
+  },
+  {
+    "index": 43,
+    "source": "manual",
+    "openalex_id": null,
+    "authors": [
+      "News24Wire"
+    ],
+    "year": 2015,
+    "title": "Shortage of skilled workers in South Africa",
+    "venue": "BusinessTech",
+    "doi": null,
+    "type": "web",
+    "oa_urls": [],
+    "url": "https://businesstech.co.za/news/it-services/87740/shortage-of-skilled-workers-in-south-africa/",
+    "raw": "News24Wire (2015) News24Wire. 2015. Shortage of skilled workers in South Africa (Accessed: 2022-01-10). [https://businesstech.co.za/news/it-services/87740/shortage-of-skilled-workers-in-south-africa/](https://businesstech.co.za/news/it-services/87740/shortage-of-skilled-workers-in-south-africa/)"
+  },
+  {
+    "index": 44,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2134140007",
+    "authors": [
+      "Makoto Nonaka",
+      "Liming Zhu",
+      "Muhammad Ali Babar",
+      "Mark Staples"
+    ],
+    "year": 2007,
+    "title": "Project Cost Overrun Simulation in Software Product Line Development",
+    "venue": "Lecture notes in computer science",
+    "doi": "10.1007/978-3-540-73460-4_29",
+    "type": "conference-paper",
+    "oa_urls": [
+      "https://unsworks.unsw.edu.au/bitstreams/7dbe4edf-a633-4680-8f9b-821aec5959af/download",
+      "https://hdl.handle.net/10344/2241",
+      "https://unsworks.unsw.edu.au/bitstreams/7dbe4edf-a633-4680-8f9b-821aec5959af/download"
+    ],
+    "url": null,
+    "raw": "Nonaka et al. (2007) Makoto Nonaka, Liming Zhu, Muhammad Ali Babar, and Mark Staples. 2007. Project cost overrun simulation in software product line development. In *Proc. of the International Conference on Product Focused Software Process Improvement*. 330–344."
+  },
+  {
+    "index": 45,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2013797311",
+    "authors": [
+      "Ariadi Nugroho",
+      "Joost Visser",
+      "Tobias Kuipers"
+    ],
+    "year": 2011,
+    "title": "An empirical model of technical debt and interest",
+    "venue": "Proceedings of the 2nd Workshop on Managing Technical Debt",
+    "doi": "10.1145/1985362.1985364",
+    "type": "conference-paper",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Nugroho et al. (2011) Ariadi Nugroho, Joost Visser, and Tobias Kuipers. 2011. An empirical model of technical debt and interest. In *Proc. of the 2nd Workshop on Managing Technical Debt*. 1–8."
+  },
+  {
+    "index": 46,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2617174400",
+    "authors": [
+      "Edson Cesar Cunha de Oliveira",
+      "Davi Viana",
+      "Marco Antônio Pinheiro de Cristo",
+      "Tayana Uchôa Conte"
+    ],
+    "year": 2017,
+    "title": "How have Software Engineering Researchers been Measuring Software Productivity? - A Systematic Mapping Study",
+    "venue": "International Conference on Enterprise Information Systems",
+    "doi": "10.5220/0006314400760087",
+    "type": "conference-paper",
+    "oa_urls": [
+      "https://www.scitepress.org/Papers/2017/63144/63144.pdf",
+      "https://doi.org/10.5220/0006314400760087"
+    ],
+    "url": null,
+    "raw": "Oliveira et al. (2017) Edson Oliveira, Davi Viana, Marco Cristo, and Tayana Conte. 2017. How have Software Engineering Researchers been Measuring Software Productivity? A Systematic Mapping Study. In *Proc. of the International Conference on Enterprise Information Systems*, Vol. 2. 76–87."
+  },
+  {
+    "index": 47,
+    "source": "manual",
+    "openalex_id": null,
+    "authors": [
+      "Eva Ostertagova",
+      "Oskar Ostertag",
+      "Jozef Kovac"
+    ],
+    "year": 2014,
+    "title": "Methodology and Application of the Kruskal-Wallis Test",
+    "venue": "Applied Mechanics and Materials",
+    "doi": null,
+    "type": "conference",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Ostertagova et al. (2014) Eva Ostertagova, Oskar Ostertag, and Jozef Kováč. 2014. Methodology and application of the Kruskal-Wallis test. In *Applied Mechanics and Materials*, Vol. 611. Trans Tech Publ, 115–120."
+  },
+  {
+    "index": 48,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W4200347313",
+    "authors": [
+      "İpek Özkaya"
+    ],
+    "year": 2021,
+    "title": "The Developer Nation",
+    "venue": "IEEE Software",
+    "doi": "10.1109/ms.2021.3118481",
+    "type": "article",
+    "oa_urls": [
+      "https://ieeexplore.ieee.org/stampPDF/getPDF.jsp?tp=&arnumber=9662418",
+      "https://ieeexplore.ieee.org/ielx7/52/9662395/09662418.pdf"
+    ],
+    "url": null,
+    "raw": "Ozkaya (2021) Ipek Ozkaya. 2021. The Developer Nation. *IEEE Software* 39, 1 (2021), 3–6."
+  },
+  {
+    "index": 49,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W3005653326",
+    "authors": [
+      "Cristiano Politowski",
+      "Foutse Khomh",
+      "Simone Romano",
+      "Giuseppe Scanniello",
+      "Fábio dos Santos Petrillo",
+      "Yann‐Gaël Guéhéneuc",
+      "Abdou Maïga"
+    ],
+    "year": 2020,
+    "title": "A large scale empirical study of the impact of Spaghetti Code and Blob anti-patterns on program comprehension",
+    "venue": "Information and Software Technology",
+    "doi": "10.1016/j.infsof.2020.106278",
+    "type": "article",
+    "oa_urls": [
+      "https://constellation.uqac.ca/6227/1/2020Politowski.pdf",
+      "https://arxiv.org/pdf/2009.02438"
+    ],
+    "url": null,
+    "raw": "Politowski et al. (2020) Cristiano Politowski, Foutse Khomh, Simone Romano, Giuseppe Scanniello, Fabio Petrillo, Yann-Gaël Guéhéneuc, and Abdou Maiga. 2020. A large scale empirical study of the impact of spaghetti code and blob anti-patterns on program comprehension. *Information and Software Technology* 122 (2020), 106278."
+  },
+  {
+    "index": 50,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W3134402730",
+    "authors": [
+      "Paul Ralph",
+      "Nauman bin Ali",
+      "Sebastian Baltes",
+      "Domenico Bianculli",
+      "Jessica Díaz",
+      "Yvonne Dittrich",
+      "Neil Ernst",
+      "Michael Felderer",
+      "ROBERT H. FELDT",
+      "Antonio Filieri",
+      "Breno Bernard Nicolau de França",
+      "Carlo A. Furia",
+      "Greg Gay",
+      "Nicolas Gold",
+      "Daniel Graziotin",
+      "Pinjia He",
+      "Rashina Hoda",
+      "Natália Juristo",
+      "Barbara Ann Kitchenham",
+      "Valentina Lenarduzzi",
+      "Jorge Martínez",
+      "Jorge Melegati",
+      "Daniel Méndez",
+      "Tim Menzies",
+      "Jefferson Seide Molléri",
+      "Dietmar Pfahl",
+      "Romain Robbes",
+      "Daniel Russo",
+      "Nyyti Saarimäki",
+      "Federica Sarro",
+      "Davide Taibi",
+      "Janet Siegmund",
+      "Diomidis D. Spinellis",
+      "Miroslaw Staron",
+      "Klaas-Jan Stol",
+      "Margaret‐Anne Storey",
+      "Davide Taibi",
+      "Damian A. Tamburri",
+      "Marco Torchiano",
+      "Christoph Treude",
+      "Burak Turhan",
+      "Xiaofeng Wang",
+      "Sira Vegas"
+    ],
+    "year": 2020,
+    "title": "Empirical Standards for Software Engineering Research",
+    "venue": "arXiv (Cornell University)",
+    "doi": "10.48550/arxiv.2010.03525",
+    "type": "preprint",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2010.03525"
+    ],
+    "url": null,
+    "raw": "Ralph et al. (2020) Paul Ralph, Nauman bin Ali, Sebastian Baltes, Domenico Bianculli, Jessica Diaz, Yvonne Dittrich, Neil Ernst, Michael Felderer, Robert Feldt, Antonio Filieri, et al. 2020. Empirical standards for software engineering research. *arXiv preprint arXiv:2010.03525* (2020)."
+  },
+  {
+    "index": 51,
+    "source": "manual",
+    "openalex_id": null,
+    "authors": [
+      "Alexander U Reik",
+      "Stefan Weiss",
+      "Udo Lindemann"
+    ],
+    "year": 2012,
+    "title": "Lean Monitoring Card: An Approach for the Multi-Perspective Evaluation of the Success of Measures to Reduce Waste within the Frame of Lean Development",
+    "venue": "CiDAD Working Paper Series",
+    "doi": null,
+    "type": "report",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Reik et al. (2012) Alexander U Reik, Stefan Weiß, and Udo Lindemann. 2012. Lean Monitoring Card: An approach for the multi-perspective evaluation of the success of measures to reduce waste within the frame of Lean Development. *CiDAD Working paper Series* 8, 4 (2012), 1–12."
+  },
+  {
+    "index": 52,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2162451880",
+    "authors": [
+      "Mehwish Riaz",
+      "Emília Mendes",
+      "Ewan D. Tempero"
+    ],
+    "year": 2009,
+    "title": "A systematic review of software maintainability prediction and metrics",
+    "venue": "Proceedings of the ... ACM-IEEE International Symposium on Empirical Software Engineering and Measurement/International Symposium on Empirical Software Engineering and Measurement",
+    "doi": "10.1109/esem.2009.5314233",
+    "type": "review",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Riaz et al. (2009) Mehwish Riaz, Emilia Mendes, and Ewan Tempero. 2009. A systematic review of software maintainability prediction and metrics. In *Proc. of the 3rd International Symposium on Empirical Software Engineering and Measurement*. 367–377."
+  },
+  {
+    "index": 53,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W4233152543",
+    "authors": [
+      "Per Runeson",
+      "Martin Höst",
+      "Austen Rainer",
+      "Björn Regnell"
+    ],
+    "year": 2012,
+    "title": "Case Study Research in Software Engineering: Guidelines and Examples",
+    "venue": "Wiley eBooks",
+    "doi": "10.1002/9781118181034",
+    "type": "book",
+    "oa_urls": [
+      "https://uhra.herts.ac.uk/id/eprint/12290/1/Rainer_book.pdf",
+      "https://uhra.herts.ac.uk/id/eprint/12290/1/Rainer_book.pdf"
+    ],
+    "url": null,
+    "raw": "Runeson et al. (2012) Per Runeson, Martin Höst, Austen Rainer, and Björn Regnell. 2012. *Case study research in software engineering: Guidelines and examples*. John Wiley & Sons."
+  },
+  {
+    "index": 54,
+    "source": "manual",
+    "openalex_id": null,
+    "authors": [
+      "Marc Sallin",
+      "Martin Kropp",
+      "Craig Anslow",
+      "James W Quilty",
+      "Andreas Meier"
+    ],
+    "year": 2021,
+    "title": "Measuring Software Delivery Performance Using the Four Key Metrics of DevOps",
+    "venue": "International Conference on Agile Software Development",
+    "doi": "10.1007/978-3-030-78098-2_7",
+    "type": "conference",
+    "oa_urls": [
+      "https://digitalcollection.zhaw.ch/bitstreams/aed1532e-160e-4186-b393-483c13ac867d/download",
+      "https://link.springer.com/content/pdf/10.1007%2F978-3-030-78098-2_7.pdf",
+      "https://hdl.handle.net/11475/22989"
+    ],
+    "url": null,
+    "raw": "Sallin et al. (2021) Marc Sallin, Martin Kropp, Craig Anslow, James W Quilty, and Andreas Meier. 2021. Measuring Software Delivery Performance Using the Four Key Metrics of DevOps. In *Proc. of the International Conference on Agile Software Development*. 103–119."
+  },
+  {
+    "index": 55,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W3142631843",
+    "authors": [
+      "Will Snipes",
+      "Brian Robinson",
+      "Yuepu Guo",
+      "Carolyn Budinger Seaman"
+    ],
+    "year": 2012,
+    "title": "Defining the decision factors for managing defects: A technical debt perspective",
+    "venue": "IEEE/ACM International Conference on Technical Debt (TechDebt)",
+    "doi": "10.1109/mtd.2012.6226001",
+    "type": "conference-paper",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Snipes et al. (2012) Will Snipes, Brian Robinson, Yuepu Guo, and Carolyn Seaman. 2012. Defining the decision factors for managing defects: A technical debt perspective. In *Proc. of the 3rd International Workshop on Managing Technical Debt*. 54–60."
+  },
+  {
+    "index": 56,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W3014522639",
+    "authors": [
+      "Peter Strečanský",
+      "Stanislav Chren",
+      "Bruno Rossi"
+    ],
+    "year": 2020,
+    "title": "Comparing maintainability index, SIG Method, and SQALE for technical debt identification",
+    "venue": "ACM Symposium on Applied Computing",
+    "doi": "10.1145/3341105.3374079",
+    "type": "conference-paper",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Strečanskỳ et al. (2020) Peter Strečanskỳ, Stanislav Chren, and Bruno Rossi. 2020. Comparing maintainability index, SIG method, and SQALE for technical debt identification. In *Proc. of the 35th Annual ACM Symposium on Applied Computing*. 121–124."
+  },
+  {
+    "index": 57,
+    "source": "manual",
+    "openalex_id": null,
+    "authors": [
+      "Stripe"
+    ],
+    "year": 2018,
+    "title": "The Developer Coefficient: Software Engineering Efficiency and Its $3 Trillion Impact on Global GDP",
+    "venue": "Stripe",
+    "doi": null,
+    "type": "report",
+    "oa_urls": [],
+    "url": "https://stripe.com/reports/developer-coefficient-2018",
+    "raw": "Stripe (2018) Stripe. 2018. *The Developer Coefficient: Software engineering efficiency and its $3 trillion impact on global GDP*. Technical Report. [https://stripe.com/reports/developer-coefficient-2018](https://stripe.com/reports/developer-coefficient-2018)"
+  },
+  {
+    "index": 58,
+    "source": "manual",
+    "openalex_id": null,
+    "authors": [
+      "Adam Tornhill"
+    ],
+    "year": 2015,
+    "title": "Your Code as a Crime Scene: Use Forensic Techniques to Arrest Defects, Bottlenecks, and Bad Design in Your Programs",
+    "venue": "Pragmatic Bookshelf",
+    "doi": null,
+    "type": "book",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Tornhill (2015) Adam Tornhill. 2015. *Your code as a crime scene: use forensic techniques to arrest defects, bottlenecks, and bad design in your programs*. Pragmatic Bookshelf."
+  },
+  {
+    "index": 59,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2884870549",
+    "authors": [
+      "Adam Tornhill"
+    ],
+    "year": 2018,
+    "title": "Prioritize technical debt in large-scale systems using codescene",
+    "venue": "IEEE/ACM International Conference on Technical Debt (TechDebt)",
+    "doi": "10.1145/3194164.3194187",
+    "type": "conference-paper",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Tornhill (2018a) Adam Tornhill. 2018a. Prioritize technical debt in large-scale systems using CodeScene. In *Proc. of the 2018 International Conference on Technical Debt*. 59–60."
+  },
+  {
+    "index": 60,
+    "source": "manual",
+    "openalex_id": null,
+    "authors": [
+      "Adam Tornhill"
+    ],
+    "year": 2018,
+    "title": "Software Design X-Rays: Fix Technical Debt with Behavioral Code Analysis",
+    "venue": "Pragmatic Bookshelf",
+    "doi": null,
+    "type": "book",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Tornhill (2018b) Adam Tornhill. 2018b. *Software Design X-Rays: Fix Technical Debt with Behavioral Code Analysis*. Pragmatic Bookshelf."
+  },
+  {
+    "index": 61,
+    "source": "manual",
+    "openalex_id": null,
+    "authors": [
+      "John W Tukey"
+    ],
+    "year": 1957,
+    "title": "On the Comparative Anatomy of Transformations",
+    "venue": "The Annals of Mathematical Statistics",
+    "doi": "10.1214/aoms/1177706875",
+    "type": "journal",
+    "oa_urls": [
+      "https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-28/issue-3/On-the-Comparative-Anatomy-of-Transformations/10.1214/aoms/1177706875.pdf"
+    ],
+    "url": null,
+    "raw": "Tukey (1957) John W Tukey. 1957. On the comparative anatomy of transformations. *The Annals of Mathematical Statistics* (1957), 602–632."
+  },
+  {
+    "index": 62,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2395955025",
+    "authors": [
+      "Sultan Wehaibi",
+      "Emad Shihab",
+      "Latifa Guerrouj"
+    ],
+    "year": 2016,
+    "title": "Examining the Impact of Self-Admitted Technical Debt on Software Quality",
+    "venue": "IEEE International Conference on Software Analysis, Evolution and Reengineering (SANER)",
+    "doi": "10.1109/saner.2016.72",
+    "type": "conference-paper",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Wehaibi et al. (2016) Sultan Wehaibi, Emad Shihab, and Latifa Guerrouj. 2016. Examining the impact of self-admitted technical debt on software quality. In *Proc. of the 23rd International Conference on Software Analysis, Evolution, and Reengineering*, Vol. 1. 179–188."
+  },
+  {
+    "index": 63,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2741561716",
+    "authors": [
+      "Xin Xia",
+      "Lingfeng Bao",
+      "David Lo",
+      "Zhenchang Xing",
+      "Ahmed E. Hassan",
+      "Shanping Li"
+    ],
+    "year": 2017,
+    "title": "Measuring Program Comprehension: A Large-Scale Field Study with Professionals",
+    "venue": "IEEE Transactions on Software Engineering",
+    "doi": "10.1109/tse.2017.2734091",
+    "type": "article",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Xia et al. (2017) Xin Xia, Lingfeng Bao, David Lo, Zhenchang Xing, Ahmed E Hassan, and Shanping Li. 2017. Measuring program comprehension: A large-scale field study with professionals. *IEEE Transactions on Software Engineering* 44, 10 (2017), 951–976."
+  },
+  {
+    "index": 64,
+    "source": "openalex",
+    "openalex_id": "https://openalex.org/W2082137964",
+    "authors": [
+      "In-Kwon Yeo"
+    ],
+    "year": 2000,
+    "title": "A new family of power transformations to improve normality or symmetry",
+    "venue": "Biometrika",
+    "doi": "10.1093/biomet/87.4.954",
+    "type": "article",
+    "oa_urls": [],
+    "url": null,
+    "raw": "Yeo and Johnson (2000) In-Kwon Yeo and Richard A Johnson. 2000. A new family of power transformations to improve normality or symmetry. *Biometrika* 87, 4 (2000), 954–959."
+  },
+  {
+    "index": 65,
+    "source": "manual",
+    "authors": [
+      "Marc Dillmann",
+      "Julien Siebert",
+      "Adam Trendowicz"
+    ],
+    "year": 2024,
+    "title": "Evaluation of large language models for assessing code maintainability",
+    "venue": "arXiv preprint arXiv:2401.12714",
+    "doi": "10.48550/arXiv.2401.12714",
+    "type": "preprint",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2401.12714"
+    ],
+    "url": "https://arxiv.org/abs/2401.12714",
+    "raw": "Marc Dillmann, Julien Siebert, Adam Trendowicz. 2024. Evaluation of large language models for assessing code maintainability. arXiv:2401.12714."
+  },
+  {
+    "index": 66,
+    "source": "manual",
+    "authors": [
+      "Bruno Claudino Matias",
+      "Savio Freire",
+      "Juliana Freitas",
+      "Felipe Fronchetti",
+      "Kostadin Damevski",
+      "Rodrigo Spinola"
+    ],
+    "year": 2026,
+    "title": "A Survey on Large Language Model Impact on Software Evolvability and Maintainability: the Good, the Bad, the Ugly, and the Remedy",
+    "venue": "arXiv preprint arXiv:2601.20879",
+    "doi": "10.48550/arXiv.2601.20879",
+    "type": "preprint",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2601.20879"
+    ],
+    "url": "https://arxiv.org/abs/2601.20879",
+    "raw": "Bruno Claudino Matias, Savio Freire, Juliana Freitas, Felipe Fronchetti, Kostadin Damevski, Rodrigo Spinola. 2026. A Survey on Large Language Model Impact on Software Evolvability and Maintainability: the Good, the Bad, the Ugly, and the Remedy. arXiv:2601.20879."
+  },
+  {
+    "index": 67,
+    "source": "manual",
+    "authors": [
+      "Nazia Jahan",
+      "Nafisa Alam",
+      "Sourov Debnath",
+      "Arafat Rahman",
+      "S. M. Waesh Ahmed",
+      "Md Farhad Alam Bhuiyan",
+      "Mia Mohammad Imran"
+    ],
+    "year": 2026,
+    "title": "Technical Debt Risks in AI-Assisted Software Development: Insights from Practitioners",
+    "venue": "arXiv preprint arXiv:2611.15310",
+    "doi": "10.48550/arXiv.2611.15310",
+    "type": "preprint",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2611.15310"
+    ],
+    "url": "https://arxiv.org/abs/2611.15310",
+    "raw": "Nazia Jahan, Nafisa Alam, Sourov Debnath, Arafat Rahman, S. M. Waesh Ahmed, Md Farhad Alam Bhuiyan, Mia Mohammad Imran. 2026. Technical Debt Risks in AI-Assisted Software Development: Insights from Practitioners. arXiv:2611.15310."
+  },
+  {
+    "index": 68,
+    "source": "manual",
+    "authors": [
+      "Yue Liu",
+      "Ratnadira Widyasari",
+      "Yanjie Zhao",
+      "Ivana Clairine Irsan",
+      "Junkai Chen",
+      "David Lo"
+    ],
+    "year": 2026,
+    "title": "Debt Behind the AI Boom: A Large-Scale Empirical Study of AI-Generated Code in the Wild",
+    "venue": "arXiv preprint arXiv:2603.28592",
+    "doi": "10.48550/arXiv.2603.28592",
+    "type": "preprint",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2603.28592"
+    ],
+    "url": "https://arxiv.org/abs/2603.28592",
+    "raw": "Yue Liu, Ratnadira Widyasari, Yanjie Zhao, Ivana Clairine Irsan, Junkai Chen, David Lo. 2026. Debt Behind the AI Boom: A Large-Scale Empirical Study of AI-Generated Code in the Wild. arXiv:2603.28592."
+  },
+  {
+    "index": 69,
+    "source": "manual",
+    "authors": [
+      "Margaret-Anne Storey"
+    ],
+    "year": 2026,
+    "title": "From Technical Debt to Cognitive and Intent Debt: Rethinking Software Health in the Age of AI",
+    "venue": "arXiv preprint arXiv:2603.22106",
+    "doi": "10.48550/arXiv.2603.22106",
+    "type": "preprint",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2603.22106"
+    ],
+    "url": "https://arxiv.org/abs/2603.22106",
+    "raw": "Margaret-Anne Storey. 2026. From Technical Debt to Cognitive and Intent Debt: Rethinking Software Health in the Age of AI. arXiv:2603.22106."
+  },
+  {
+    "index": 70,
+    "source": "manual",
+    "authors": [
+      "Alejandro Velasco",
+      "Daniel Rodriguez-Cardenas",
+      "Luftar Rahman Alif",
+      "David N. Palacio",
+      "Denys Poshyvanyk"
+    ],
+    "year": 2024,
+    "title": "How Propense Are Large Language Models at Producing Code Smells? A Benchmarking Study",
+    "venue": "arXiv preprint arXiv:2412.18989",
+    "doi": "10.48550/arXiv.2412.18989",
+    "type": "preprint",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2412.18989"
+    ],
+    "url": "https://arxiv.org/abs/2412.18989",
+    "raw": "Alejandro Velasco, Daniel Rodriguez-Cardenas, Luftar Rahman Alif, David N. Palacio, Denys Poshyvanyk. 2024. How Propense Are Large Language Models at Producing Code Smells? A Benchmarking Study. arXiv:2412.18989."
+  },
+  {
+    "index": 71,
+    "source": "manual",
+    "authors": [
+      "Saymon Souza",
+      "Amanda Santana",
+      "Eduardo Figueiredo",
+      "Igor Muzetti",
+      "João Eduardo Montandon",
+      "Lionel Briand"
+    ],
+    "year": 2026,
+    "title": "Beyond Strict Rules: Assessing the Effectiveness of Large Language Models for Code Smell Detection",
+    "venue": "arXiv preprint arXiv:2601.09873",
+    "doi": "10.48550/arXiv.2601.09873",
+    "type": "preprint",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2601.09873"
+    ],
+    "url": "https://arxiv.org/abs/2601.09873",
+    "raw": "Saymon Souza, Amanda Santana, Eduardo Figueiredo, Igor Muzetti, João Eduardo Montandon, Lionel Briand. 2026. Beyond Strict Rules: Assessing the Effectiveness of Large Language Models for Code Smell Detection. arXiv:2601.09873."
+  },
+  {
+    "index": 72,
+    "source": "manual",
+    "authors": [
+      "Taiki Wakamatsu",
+      "Yuta Ishimoto",
+      "Masanari Kondo",
+      "Yasutaka Kamei"
+    ],
+    "year": 2026,
+    "title": "PreMaQ: Predicting Maintainability-Related Quality of LLM-Generated Code Before Generation",
+    "venue": "arXiv preprint arXiv:2610.05858",
+    "doi": "10.48550/arXiv.2610.05858",
+    "type": "preprint",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2610.05858"
+    ],
+    "url": "https://arxiv.org/abs/2610.05858",
+    "raw": "Taiki Wakamatsu, Yuta Ishimoto, Masanari Kondo, Yasutaka Kamei. 2026. PreMaQ: Predicting Maintainability-Related Quality of LLM-Generated Code Before Generation. arXiv:2610.05858."
+  },
+  {
+    "index": 73,
+    "source": "manual",
+    "authors": [
+      "Alfred Santa Molison",
+      "Márcia Cristina Moraes",
+      "Glaucia Melo",
+      "Fabio Santos",
+      "Wesley K. G. Assunção"
+    ],
+    "year": 2025,
+    "title": "Is LLM-Generated Code More Maintainable & Reliable Than Human-Written Code?",
+    "venue": "Proceedings of the ... ACM-IEEE International Symposium on Empirical Software Engineering and Measurement/International Symposium on Empirical Software Engineering and Measurement",
+    "doi": "10.1109/esem64174.2025.00036",
+    "type": "conference-paper",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2508.00700"
+    ],
+    "url": "https://doi.org/10.1109/esem64174.2025.00036",
+    "raw": "Alfred Santa Molison, Márcia Cristina Moraes, Glaucia Melo, Fabio Santos, Wesley K. G. Assunção. 2025. Is LLM-Generated Code More Maintainable & Reliable Than Human-Written Code?."
+  },
+  {
+    "index": 74,
+    "source": "manual",
+    "authors": [
+      "Mathilda Rönnqvist",
+      "Anton Lindström"
+    ],
+    "year": 2026,
+    "title": "A small-scale exploratory case study of maintainability-related metrics of LLM-generated C++ code",
+    "venue": "KTH Publication Database DiVA (KTH Royal Institute of Technology)",
+    "doi": null,
+    "type": "dissertation",
+    "oa_urls": [
+      "https://bth.diva-portal.org/smash/get/diva2:2074553/FULLTEXT01.pdf",
+      "http://urn.kb.se/resolve?urn=urn:nbn:se:bth-29849"
+    ],
+    "url": "http://urn.kb.se/resolve?urn=urn:nbn:se:bth-29849",
+    "raw": "Mathilda Rönnqvist, Anton Lindström. 2026. A small-scale exploratory case study of maintainability-related metrics of LLM-generated C++ code."
+  },
+  {
+    "index": 75,
+    "source": "manual",
+    "authors": [
+      "Zeeshan Rasheed",
+      "Malik Abdul Sami",
+      "Muhammad Waseem",
+      "Kai-Kristian Kemell",
+      "Xiaofeng Wang",
+      "Anh Nguyen",
+      "Kari Systä",
+      "Pekka Abrahamsson"
+    ],
+    "year": 2024,
+    "title": "AI-powered Code Review with LLMs: Early Results",
+    "venue": "arXiv preprint arXiv:2404.18496",
+    "doi": "10.48550/arXiv.2404.18496",
+    "type": "preprint",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2404.18496"
+    ],
+    "url": "https://arxiv.org/abs/2404.18496",
+    "raw": "Zeeshan Rasheed, Malik Abdul Sami, Muhammad Waseem, Kai-Kristian Kemell, Xiaofeng Wang, Anh Nguyen, Kari Systä, Pekka Abrahamsson. 2024. AI-powered Code Review with LLMs: Early Results. arXiv:2404.18496."
+  },
+  {
+    "index": 76,
+    "source": "manual",
+    "authors": [
+      "Nat McAleese",
+      "Rai Michael Pokorny",
+      "Juan Felipe Ceron Uribe",
+      "Evgenia Nitishinskaya",
+      "Maja Trebacz",
+      "Jan Leike"
+    ],
+    "year": 2024,
+    "title": "LLM Critics Help Catch LLM Bugs",
+    "venue": "arXiv preprint arXiv:2407.00215",
+    "doi": "10.48550/arXiv.2407.00215",
+    "type": "preprint",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2407.00215"
+    ],
+    "url": "https://arxiv.org/abs/2407.00215",
+    "raw": "Nat McAleese, Rai Michael Pokorny, Juan Felipe Ceron Uribe, Evgenia Nitishinskaya, Maja Trebacz, Jan Leike. 2024. LLM Critics Help Catch LLM Bugs. arXiv:2407.00215."
+  },
+  {
+    "index": 77,
+    "source": "manual",
+    "authors": [
+      "Yangruibo Ding",
+      "Marcus J. Min",
+      "Gail Kaiser",
+      "Baishakhi Ray"
+    ],
+    "year": 2024,
+    "title": "CYCLE: Learning to Self-Refine the Code Generation",
+    "venue": "arXiv preprint arXiv:2403.18746",
+    "doi": "10.48550/arXiv.2403.18746",
+    "type": "preprint",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2403.18746"
+    ],
+    "url": "https://arxiv.org/abs/2403.18746",
+    "raw": "Yangruibo Ding, Marcus J. Min, Gail Kaiser, Baishakhi Ray. 2024. CYCLE: Learning to Self-Refine the Code Generation. arXiv:2403.18746."
+  },
+  {
+    "index": 78,
+    "source": "manual",
+    "authors": [
+      "Luigi Lavazza",
+      "Abedallah Zaid Abualkishik",
+      "Geng Liu",
+      "Sandro Morasca"
+    ],
+    "year": 2022,
+    "title": "An empirical evaluation of the “Cognitive Complexity” measure as a predictor of code understandability",
+    "venue": "Journal of Systems and Software",
+    "doi": "10.1016/j.jss.2022.111561",
+    "type": "article",
+    "oa_urls": [
+      "https://osf.io/2mbwe/download"
+    ],
+    "url": "https://doi.org/10.1016/j.jss.2022.111561",
+    "raw": "Luigi Lavazza, Abedallah Zaid Abualkishik, Geng Liu, Sandro Morasca. 2022. An empirical evaluation of the “Cognitive Complexity” measure as a predictor of code understandability."
+  },
+  {
+    "index": 79,
+    "source": "manual",
+    "authors": [
+      "Ahmed E. Hassan",
+      "Hao Li",
+      "Dayi Lin",
+      "Bram Adams",
+      "Tse-Hsun Chen",
+      "Yutaro Kashiwa",
+      "Dong Qiu"
+    ],
+    "year": 2025,
+    "title": "Agentic Software Engineering: Foundational Pillars and a Research Roadmap",
+    "venue": "arXiv preprint arXiv:2509.06216",
+    "doi": "10.48550/arXiv.2509.06216",
+    "type": "preprint",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2509.06216"
+    ],
+    "url": "https://arxiv.org/abs/2509.06216",
+    "raw": "Ahmed E. Hassan, Hao Li, Dayi Lin, Bram Adams, Tse-Hsun Chen, Yutaro Kashiwa, Dong Qiu. 2025. Agentic Software Engineering: Foundational Pillars and a Research Roadmap. arXiv:2509.06216."
+  },
+  {
+    "index": 80,
+    "source": "manual",
+    "authors": [
+      "Maria I. Gorinova",
+      "Macey Baker",
+      "Amy Heineike",
+      "Maksim Shaposhnikov",
+      "Rob Willoughby",
+      "Dru Knox"
+    ],
+    "year": 2026,
+    "title": "Position: Coding Benchmarks Are Misaligned with Agentic Software Engineering",
+    "venue": "arXiv preprint arXiv:2606.17799",
+    "doi": "10.48550/arXiv.2606.17799",
+    "type": "preprint",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2606.17799"
+    ],
+    "url": "https://arxiv.org/abs/2606.17799",
+    "raw": "Maria I. Gorinova, Macey Baker, Amy Heineike, Maksim Shaposhnikov, Rob Willoughby, Dru Knox. 2026. Position: Coding Benchmarks Are Misaligned with Agentic Software Engineering. arXiv:2606.17799."
+  },
+  {
+    "index": 81,
+    "source": "manual",
+    "authors": [
+      "Linghao Zhang",
+      "Shilin He",
+      "Chaoyun Zhang",
+      "Yu Kang",
+      "Bowen Li",
+      "Chengxing Xie",
+      "Junhao Wang",
+      "Maoquan Wang",
+      "Yufan Huang",
+      "Shengyu Fu",
+      "Elsie Nallipogu",
+      "Qingwei Lin",
+      "Yingnong Dang",
+      "Saravan Rajmohan",
+      "Dongmei Zhang"
+    ],
+    "year": 2025,
+    "title": "SWE-bench Goes Live!",
+    "venue": "arXiv preprint arXiv:2505.23419",
+    "doi": "10.48550/arXiv.2505.23419",
+    "type": "preprint",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2505.23419"
+    ],
+    "url": "https://arxiv.org/abs/2505.23419",
+    "raw": "Linghao Zhang, Shilin He, Chaoyun Zhang, Yu Kang, Bowen Li, Chengxing Xie, Junhao Wang, Maoquan Wang, Yufan Huang, Shengyu Fu, Elsie Nallipogu, Qingwei Lin, Yingnong Dang, Saravan Rajmohan, Dongmei Zhang. 2025. SWE-bench Goes Live!. arXiv:2505.23419."
+  },
+  {
+    "index": 82,
+    "source": "manual",
+    "authors": [
+      "Pujun Zheng",
+      "Zixin Shang",
+      "Shufan Jiang",
+      "Wenhui Tian",
+      "Dongsheng Zhu",
+      "Zerun Ma",
+      "Dingbo Yuan",
+      "Qi Zhang"
+    ],
+    "year": 2026,
+    "title": "SWE-Bench Pro Verified: A Reliable Benchmark for Software Engineering Agents",
+    "venue": "arXiv preprint arXiv:2609.08149",
+    "doi": "10.48550/arXiv.2609.08149",
+    "type": "preprint",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2609.08149"
+    ],
+    "url": "https://arxiv.org/abs/2609.08149",
+    "raw": "Pujun Zheng, Zixin Shang, Shufan Jiang, Wenhui Tian, Dongsheng Zhu, Zerun Ma, Dingbo Yuan, Qi Zhang. 2026. SWE-Bench Pro Verified: A Reliable Benchmark for Software Engineering Agents. arXiv:2609.08149."
+  },
+  {
+    "index": 83,
+    "source": "manual",
+    "authors": [
+      "Mohammed Mehedi Hasan",
+      "Hao Li",
+      "Emad Fallahzadeh",
+      "Gopi Krishnan Rajbahadur",
+      "Bram Adams",
+      "Ahmed E. Hassan"
+    ],
+    "year": 2025,
+    "title": "Model Context Protocol (MCP) at First Glance: Studying the Security and Maintainability of MCP Servers",
+    "venue": "arXiv preprint arXiv:2506.13538",
+    "doi": "10.48550/arXiv.2506.13538",
+    "type": "preprint",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2506.13538"
+    ],
+    "url": "https://arxiv.org/abs/2506.13538",
+    "raw": "Mohammed Mehedi Hasan, Hao Li, Emad Fallahzadeh, Gopi Krishnan Rajbahadur, Bram Adams, Ahmed E. Hassan. 2025. Model Context Protocol (MCP) at First Glance: Studying the Security and Maintainability of MCP Servers. arXiv:2506.13538."
+  },
+  {
+    "index": 84,
+    "source": "manual",
+    "authors": [
+      "Kehui Chen",
+      "Yicheng Sun",
+      "Jacky Keung",
+      "Zhenyu Mao",
+      "Xiaoxue Ma"
+    ],
+    "year": 2026,
+    "title": "Understanding How Enterprises Adopt the Model Context Protocol for LLM-Driven Software Engineering",
+    "venue": "arXiv preprint arXiv:2606.09182",
+    "doi": "10.48550/arXiv.2606.09182",
+    "type": "preprint",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2606.09182"
+    ],
+    "url": "https://arxiv.org/abs/2606.09182",
+    "raw": "Kehui Chen, Yicheng Sun, Jacky Keung, Zhenyu Mao, Xiaoxue Ma. 2026. Understanding How Enterprises Adopt the Model Context Protocol for LLM-Driven Software Engineering. arXiv:2606.09182."
+  },
+  {
+    "index": 85,
+    "source": "manual",
+    "authors": [
+      "Muhammad Hamza Arshad Majeed",
+      "May Mahmoud",
+      "Sarah Nadi"
+    ],
+    "year": 2026,
+    "title": "An Empirical Study of Model Context Protocol Applications",
+    "venue": "arXiv preprint arXiv:2607.25635",
+    "doi": "10.48550/arXiv.2607.25635",
+    "type": "preprint",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2607.25635"
+    ],
+    "url": "https://arxiv.org/abs/2607.25635",
+    "raw": "Muhammad Hamza Arshad Majeed, May Mahmoud, Sarah Nadi. 2026. An Empirical Study of Model Context Protocol Applications. arXiv:2607.25635."
+  },
+  {
+    "index": 86,
+    "source": "manual",
+    "authors": [
+      "Xiaofan Li",
+      "Xing Gao"
+    ],
+    "year": 2025,
+    "title": "A First Look at the Security Issues in the Model Context Protocol Ecosystem",
+    "venue": "arXiv preprint arXiv:2510.16558",
+    "doi": "10.48550/arXiv.2510.16558",
+    "type": "preprint",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2510.16558"
+    ],
+    "url": "https://arxiv.org/abs/2510.16558",
+    "raw": "Xiaofan Li, Xing Gao. 2025. A First Look at the Security Issues in the Model Context Protocol Ecosystem. arXiv:2510.16558."
+  },
+  {
+    "index": 87,
+    "source": "manual",
+    "authors": [
+      "Zhiling Luo",
+      "Xiaorong Shi",
+      "Xuanrui Lin",
+      "Jinyang Gao"
+    ],
+    "year": 2025,
+    "title": "Evaluation Report on MCP Servers",
+    "venue": "arXiv preprint arXiv:2504.11094",
+    "doi": "10.48550/arXiv.2504.11094",
+    "type": "preprint",
+    "oa_urls": [
+      "https://arxiv.org/pdf/2504.11094"
+    ],
+    "url": "https://arxiv.org/abs/2504.11094",
+    "raw": "Zhiling Luo, Xiaorong Shi, Xuanrui Lin, Jinyang Gao. 2025. Evaluation Report on MCP Servers. arXiv:2504.11094."
+  }
+]

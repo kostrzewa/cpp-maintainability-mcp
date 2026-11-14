@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "maintainability-mcp"
 version = "0.1.0"
 description = "MCP server for evaluating and improving C++ maintainability"
+readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
 dependencies = [
