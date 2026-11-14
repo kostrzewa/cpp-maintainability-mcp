@@ -114,7 +114,8 @@ checkout path, or generate a project config with `scripts/opencode_config.py`.
       "environment": {
         "PYTHONPATH": "/path/to/cpp-maintainability-mcp/src"
       },
-      "enabled": true
+      "enabled": true,
+      "timeout": 60000
     }
   }
 }
@@ -137,12 +138,19 @@ checkout path, or generate a project config with `scripts/opencode_config.py`.
         "environment": {
           "PYTHONPATH": "/path/to/cpp-maintainability-mcp/src"
         },
-        "codemode": false
+        "codemode": false,
+        "timeout": {
+          "execution": 60000
+        }
       }
     }
   }
 }
 ```
+
+opencode 1.19.5 defaults MCP request timeouts to **5 seconds**. Increase
+`timeout` (milliseconds) for project-wide scans. Single-file scans use direct
+analysis and should finish well under that.
 
 Generate the project config automatically:
 
@@ -243,6 +251,9 @@ project root when `cwd` is omitted). Start from
 | `weights` | see `config.py` | Per-dimension weights; must sum to 1.0 |
 | `thresholds` | see `config.py` | `(good, bad)` thresholds per dimension |
 | `gate_threshold` | `8.0` | Minimum score for `compare_revisions` |
+| `scan_timeout` | `30.0` | Overall scan deadline in seconds |
+| `clang_tidy_timeout` | `120.0` | Per-file clang-tidy timeout in seconds |
+| `cppcheck_timeout` | `60.0` | Per-file cppcheck timeout in seconds |
 | `history_path` | `.cpp-maintainability/history.sqlite3` | SQLite history location |
 | `extensions` | C++ source/header suffixes | Files to scan |
 | `ignore_patterns` | build/vendor dirs | Directories or globs to skip |

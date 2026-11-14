@@ -5,6 +5,7 @@ from __future__ import annotations
 import fnmatch
 import json
 import re
+import time
 from pathlib import Path
 from typing import Any
 
@@ -30,6 +31,7 @@ from .paths import (
     is_header,
     is_source,
     resolve_include_paths,
+    should_use_project_mode,
     tu_files,
 )
 from .scoring import ScoringEngine
@@ -75,6 +77,7 @@ def build_analyzers(
                     env,
                     compile_commands,
                     include_paths,
+                    timeout=config.cppcheck_timeout,
                 )
             )
         elif name == "clang_tidy":
@@ -87,6 +90,7 @@ def build_analyzers(
                     env,
                     compile_commands,
                     include_paths,
+                    timeout=config.clang_tidy_timeout,
                 )
             )
         elif name == "libclang":
@@ -99,6 +103,8 @@ def build_analyzers(
             )
         else:
             analyzers.append(analyzer_class())
+    if any(analyzer.name == "lizard" and analyzer.available() for analyzer in analyzers):
+        analyzers = [analyzer for analyzer in analyzers if analyzer.name != "heuristic"]
     return analyzers
 
 
@@ -282,19 +288,27 @@ class MaintainabilityEngine:
         if diff_map is not None:
             files = [file for file in files if _matches_diff_file(file, diff_map)]
 
+        scanned_headers = {file.resolve() for file in files if is_header(file)}
         compile_commands_path = find_compile_commands(self.config, paths)
         include_paths = resolve_include_paths(self.config, compile_commands_path)
+        use_project_mode = (
+            compile_commands_path is not None
+            and should_use_project_mode(paths)
+        )
         header_map: dict[Path, list[Path]] = {}
-        if compile_commands_path is not None:
+        if use_project_mode:
             try:
-                header_map = build_header_tu_map(compile_commands_path)
+                header_map = build_header_tu_map(
+                    compile_commands_path, targets=scanned_headers
+                )
             except (OSError, TypeError, ValueError):
                 compile_commands_path = None
+        else:
+            compile_commands_path = None
         self.analyzers = build_analyzers(
             self.config, compile_commands_path, include_paths
         )
 
-        scanned_headers = {file.resolve() for file in files if is_header(file)}
         chosen = choose_tu_per_header(header_map, scanned_headers)
         uncovered_headers = scanned_headers - set(chosen)
         tu_set = (
@@ -313,14 +327,21 @@ class MaintainabilityEngine:
             str(file.resolve()): {} for file in files
         }
         tools: dict[str, str] = {}
+        deadline = time.monotonic() + self.config.scan_timeout
 
         for analyzer in self.analyzers:
             if analyzer.name == "duplication":
+                continue
+            if time.monotonic() >= deadline:
+                tools[analyzer.name] = "timeout"
                 continue
             if not analyzer.available():
                 tools[analyzer.name] = "unavailable"
                 continue
             tools[analyzer.name] = "ok"
+            remaining = max(1.0, deadline - time.monotonic())
+            if hasattr(analyzer, "timeout"):
+                analyzer.timeout = min(analyzer.timeout, remaining)
             if analyzer.name == "cppcheck" and compile_commands_path:
                 findings.extend(analyzer.analyze_project(files).findings)
                 for header in sorted(uncovered_headers):
@@ -333,6 +354,9 @@ class MaintainabilityEngine:
                 for header, tu in chosen.items():
                     tu_to_headers.setdefault(tu, []).append(header)
                 for tu in sorted(tu_to_headers):
+                    analyzer.header_filter = "|".join(
+                        re.escape(str(header)) for header in tu_to_headers[tu]
+                    )
                     findings.extend(analyzer.analyze_tu(tu).findings)
                 for header in sorted(uncovered_headers):
                     findings.extend(analyzer.analyze_direct(header).findings)

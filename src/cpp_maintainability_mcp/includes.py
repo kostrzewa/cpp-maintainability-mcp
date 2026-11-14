@@ -51,8 +51,18 @@ def _is_system(path: Path) -> bool:
     return any(text.startswith(prefix) for prefix in SYSTEM_PREFIXES)
 
 
-def build_header_tu_map(compile_commands_path: Path) -> dict[Path, list[Path]]:
+def build_header_tu_map(
+    compile_commands_path: Path,
+    targets: set[Path] | None = None,
+) -> dict[Path, list[Path]]:
     mapping: dict[Path, list[Path]] = {}
+    include_cache: dict[Path, list[tuple[bool, str]]] = {}
+
+    def includes(path: Path) -> list[tuple[bool, str]]:
+        if path not in include_cache:
+            include_cache[path] = parse_includes(path)
+        return include_cache[path]
+
     for entry in load_compile_commands(compile_commands_path):
         tu = entry_file(entry)
         if tu is None:
@@ -66,17 +76,24 @@ def build_header_tu_map(compile_commands_path: Path) -> dict[Path, list[Path]]:
             if current in visited:
                 continue
             visited.add(current)
-            for is_quoted, include in parse_includes(current):
+            for is_quoted, include in includes(current):
                 resolved = resolve_include(
                     is_quoted, include, current, include_paths
                 )
                 if resolved is None or _is_system(resolved):
                     continue
-                if resolved.suffix.lower() in HEADER_EXTENSIONS:
+                if (
+                    resolved.suffix.lower() in HEADER_EXTENSIONS
+                    and (targets is None or resolved in targets)
+                ):
                     mapping.setdefault(resolved, [])
                     if tu not in mapping[resolved]:
                         mapping[resolved].append(tu)
                 stack.append(resolved)
+            if targets is not None and targets <= set(mapping):
+                break
+        if targets is not None and targets <= set(mapping):
+            break
     return mapping
 
 

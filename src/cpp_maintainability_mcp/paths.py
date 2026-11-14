@@ -20,6 +20,10 @@ def is_source(path: str | Path) -> bool:
     return Path(path).suffix.lower() in SOURCE_EXTENSIONS
 
 
+def should_use_project_mode(paths: list[str]) -> bool:
+    return any(Path(path).is_dir() for path in paths)
+
+
 def find_compile_commands(config: Config, roots: list[str]) -> Path | None:
     if config.compile_commands:
         path = Path(config.compile_commands)

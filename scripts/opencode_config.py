@@ -25,6 +25,7 @@ def server_entry() -> dict:
 def legacy_snippet() -> dict:
     entry = server_entry()
     entry["enabled"] = True
+    entry["timeout"] = 60000
     return {
         "$schema": "https://opencode.ai/config.json",
         "mcp": {"cpp-maintainability": entry},
@@ -34,6 +35,7 @@ def legacy_snippet() -> dict:
 def v2_snippet() -> dict:
     entry = server_entry()
     entry["codemode"] = False
+    entry["timeout"] = {"execution": 60000}
     return {
         "$schema": "https://opencode.ai/config.json",
         "mcp": {"servers": {"cpp-maintainability": entry}},

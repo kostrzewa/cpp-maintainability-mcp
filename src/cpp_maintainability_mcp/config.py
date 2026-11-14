@@ -93,6 +93,9 @@ class Config:
     ignore_patterns: tuple[str, ...] = DEFAULT_IGNORE
     max_file_bytes: int = 2_000_000
     gate_threshold: float = 8.0
+    scan_timeout: float = 30.0
+    clang_tidy_timeout: float = 120.0
+    cppcheck_timeout: float = 60.0
     history_path: str = ".cpp-maintainability/history.sqlite3"
 
     @classmethod

@@ -24,12 +24,14 @@ class CppcheckAnalyzer(Analyzer):
         env: dict[str, str] | None = None,
         compile_commands: Path | None = None,
         include_paths: list[str] | None = None,
+        timeout: float = 60.0,
     ):
         self.executable = executable
         self.cxx_standard = cxx_standard
         self.env = env
         self.compile_commands = compile_commands
         self.include_paths = include_paths or []
+        self.timeout = timeout
 
     def available(self) -> bool:
         return bool(self.executable) and shutil.which(self.executable) is not None
@@ -71,7 +73,7 @@ class CppcheckAnalyzer(Analyzer):
                 command,
                 capture_output=True,
                 text=True,
-                timeout=60,
+                timeout=self.timeout,
                 check=False,
                 env=self.env,
             )

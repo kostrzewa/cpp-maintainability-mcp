@@ -107,7 +107,8 @@ Next steps:
            "type": "local",
            "command": ["$VENV_PY", "-m", "cpp_maintainability_mcp"],
            "environment": {"PYTHONPATH": "$ROOT/src"},
-           "enabled": true
+           "enabled": true,
+           "timeout": 60000
          }
        }
 

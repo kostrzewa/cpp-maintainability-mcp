@@ -28,6 +28,8 @@ class ClangTidyAnalyzer(Analyzer):
         env: dict[str, str] | None = None,
         compile_commands: Path | None = None,
         include_paths: list[str] | None = None,
+        timeout: float = 120.0,
+        header_filter: str | None = None,
     ):
         self.executable = executable
         self.build_dir = build_dir
@@ -36,6 +38,8 @@ class ClangTidyAnalyzer(Analyzer):
         self.env = env
         self.compile_commands = compile_commands
         self.include_paths = include_paths or []
+        self.timeout = timeout
+        self.header_filter = header_filter
 
     def available(self) -> bool:
         return bool(self.executable) and shutil.which(self.executable) is not None
@@ -50,6 +54,8 @@ class ClangTidyAnalyzer(Analyzer):
         command += ["-p", str(self.compile_commands.parent)]
         if self.checks:
             command += [f"-checks={self.checks}"]
+        if self.header_filter:
+            command += [f"-header-filter={self.header_filter}"]
         command.append(str(path))
         return self._run(command)
 
@@ -57,6 +63,10 @@ class ClangTidyAnalyzer(Analyzer):
         command = [self.executable]
         if self.checks:
             command += [f"-checks={self.checks}"]
+        if is_header(path):
+            command += [f"-header-filter={re.escape(str(path))}"]
+        elif self.header_filter:
+            command += [f"-header-filter={self.header_filter}"]
         command += [str(path), "--"]
         if is_header(path):
             command += ["-x", "c++-header"]
@@ -72,7 +82,7 @@ class ClangTidyAnalyzer(Analyzer):
                 command,
                 capture_output=True,
                 text=True,
-                timeout=120,
+                timeout=self.timeout,
                 check=False,
                 env=self.env,
             )

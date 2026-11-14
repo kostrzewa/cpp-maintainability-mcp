@@ -11,7 +11,8 @@
       "environment": {
         "PYTHONPATH": "/home/bartek/code/cpp-maintainability-mcp/src"
       },
-      "enabled": true
+      "enabled": true,
+      "timeout": 60000
     }
   }
 }
