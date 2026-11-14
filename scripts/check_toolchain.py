@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -67,6 +68,7 @@ def main() -> int:
     libclang = resolve_libclang(config)
     bindings_ok, bindings_detail = check_libclang_bindings(libclang)
     compile_commands = find_compile_commands(config, [str(Path.cwd())])
+    jobs = config.cppcheck_jobs or max(1, (os.cpu_count() or 1) // 4)
 
     checks = [
         ("clang version", version or "not detected", bool(version)),
@@ -79,6 +81,7 @@ def main() -> int:
             str(compile_commands) if compile_commands else "not found",
             compile_commands is not None,
         ),
+        ("cppcheck jobs", str(jobs), True),
     ]
 
     if args.json:
@@ -96,7 +99,7 @@ def main() -> int:
                     "compile_commands": (
                         str(compile_commands) if compile_commands else None
                     ),
-                    "header_mode": "tu" if compile_commands else "direct",
+                    "cppcheck_jobs": jobs,
                 },
                 indent=2,
             )
@@ -107,10 +110,10 @@ def main() -> int:
             status = "ok" if ok else "missing"
             print(f"  {name:<16} {status:<8} {value}")
         print()
-        mode = "TU context" if compile_commands else "direct-header fallback"
-        print(f"Header mode: {mode}")
         required_ok = all(
-            ok for name, _, ok in checks if name != "compile_commands"
+            ok
+            for name, _, ok in checks
+            if name not in ("compile_commands", "cppcheck jobs")
         )
         if required_ok:
             print("All required tools are available.")

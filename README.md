@@ -228,6 +228,8 @@ project root when `cwd` is omitted). Start from
 {
   "clang_version": "22",
   "cxx_standard": "c++20",
+  "scan_mode": "auto",
+  "cppcheck_jobs": 0,
   "clean_env": true,
   "clean_env_vars": ["LD_LIBRARY_PATH"]
 }
@@ -243,14 +245,17 @@ project root when `cwd` is omitted). Start from
 | `tool_env` | `{}` | Extra environment variables for analyzer subprocesses |
 | `tool_paths` | `{}` | Explicit paths for `clang_tidy`, `cppcheck`, `libclang`, `clang`, `scan_build` |
 | `libclang_library` | auto-detect | Explicit `libclang.so` path |
-| `build_dir` | unset | `compile_commands.json` directory for clang-tidy |
+| `build_dir` | unset | Directory to search for `compile_commands.json` |
 | `compile_commands` | auto-discover | Path to `compile_commands.json` or its directory |
-| `include_paths` | `[]` | Extra `-I` paths for direct-header and libclang analysis |
+| `include_paths` | `[]` | Extra `-I` paths when the database is absent |
+| `defines` | `[]` | Extra `-D`/`-U` flags when the database is absent |
+| `scan_mode` | `"auto"` | `auto`, `fast`, or `direct` |
+| `cppcheck_jobs` | `0` | `0` = one quarter of the CPU count |
 | `enabled_analyzers` | all | Subset of `heuristic`, `duplication`, `headers`, `cognitive`, `testability`, `lizard`, `cppcheck`, `clang_tidy`, `libclang` |
 | `weights` | see `config.py` | Per-dimension weights; must sum to 1.0 |
 | `thresholds` | see `config.py` | `(good, bad)` thresholds per dimension |
 | `gate_threshold` | `8.0` | Minimum score for `compare_revisions` |
-| `scan_timeout` | `30.0` | Overall scan deadline in seconds |
+| `scan_timeout` | `60.0` | Overall scan deadline in seconds |
 | `clang_tidy_timeout` | `120.0` | Per-file clang-tidy timeout in seconds |
 | `cppcheck_timeout` | `60.0` | Per-file cppcheck timeout in seconds |
 | `history_path` | `.cpp-maintainability/history.sqlite3` | SQLite history location |
@@ -288,21 +293,23 @@ The Python bindings are loaded in-process with
 
 ## Header analysis
 
-The server uses a hybrid header strategy:
+The server analyzes files directly. `compile_commands.json` is used only as a
+source of compile flags:
 
-- If `compile_commands.json` is found, clang-tidy runs on the translation units
-  with `-p`, and cppcheck runs with `--project`. Findings in included headers
-  are attributed to the header paths.
-- The server statically scans `#include` directives to map headers to TUs. It
-  does not run the compiler for this step, so build configuration is respected
-  through the include paths already recorded in `compile_commands.json`.
-- A header covered by a TU is analyzed through one chosen TU. A header not
-  covered by any TU falls back to single-file analysis:
-  - clang-tidy: `-- -x c++-header -std=c++20 -I...`
-  - cppcheck: `--language=c++ -I...`
-- Header-only libraries need at least one TU in `compile_commands.json` (a
-  test, example, or generated TU) that includes the headers. Headers outside
-  that coverage still get the single-file fallback.
+- `.cpp` files use their own compile command (include paths, defines, standard).
+- headers use the union of include paths and defines from the database.
+- without a database, the config's `include_paths`, `defines`, and
+  `cxx_standard` are used. Missing flags may produce warnings or errors.
+
+There is no translation-unit sweep. Header analysis uses `-x c++-header` for
+clang-tidy/libclang and `--language=c++` for cppcheck.
+
+## Scan modes
+
+- `auto` (default): directory → fast, files → direct, diff → direct.
+- `fast`: fast analyzers on all files plus `cppcheck --project -j`; skips
+  clang-tidy and libclang. This is the project-wide default.
+- `direct`: all enabled analyzers directly on the scanned files.
 
 Generate `compile_commands.json` with your build system:
 
@@ -321,7 +328,7 @@ bazel run @hedron_compile_commands//:refresh_all
 ```
 
 Set `compile_commands` if the file is not in the project root or `build_dir`,
-and `include_paths` if the single-file fallback needs extra `-I` paths.
+and `include_paths`/`defines` when there is no database.
 
 ## Troubleshooting
 

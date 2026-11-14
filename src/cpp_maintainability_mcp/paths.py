@@ -1,9 +1,10 @@
-"""Filesystem, compile-command, and include-path helpers."""
+"""Filesystem, compile-command, and compile-flag helpers."""
 
 from __future__ import annotations
 
 import json
 import shlex
+from dataclasses import dataclass
 from pathlib import Path
 
 from .config import Config
@@ -18,10 +19,6 @@ def is_header(path: str | Path) -> bool:
 
 def is_source(path: str | Path) -> bool:
     return Path(path).suffix.lower() in SOURCE_EXTENSIONS
-
-
-def should_use_project_mode(paths: list[str]) -> bool:
-    return any(Path(path).is_dir() for path in paths)
 
 
 def find_compile_commands(config: Config, roots: list[str]) -> Path | None:
@@ -93,13 +90,45 @@ def include_paths_from_entry(entry: dict) -> list[str]:
     return list(dict.fromkeys(paths))
 
 
-def include_paths_from_compile_commands(path: Path) -> list[str]:
-    paths: list[str] = []
-    for entry in load_compile_commands(path):
-        for include in include_paths_from_entry(entry):
-            if include not in paths:
-                paths.append(include)
-    return paths
+def defines_from_entry(entry: dict) -> list[str]:
+    defines: list[str] = []
+    arguments = entry_arguments(entry)
+    index = 0
+    while index < len(arguments):
+        argument = arguments[index]
+        if argument in ("-D", "-U"):
+            if index + 1 < len(arguments):
+                defines.append(f"{argument}{arguments[index + 1]}")
+                index += 2
+                continue
+        elif argument.startswith(("-D", "-U")):
+            defines.append(argument)
+        index += 1
+    return list(dict.fromkeys(defines))
+
+
+def standard_from_entry(entry: dict) -> str | None:
+    for argument in entry_arguments(entry):
+        if argument.startswith("-std="):
+            return argument[len("-std=") :]
+    return None
+
+
+def _merge(*groups: list[str]) -> list[str]:
+    merged: list[str] = []
+    for group in groups:
+        for item in group:
+            if item not in merged:
+                merged.append(item)
+    return merged
+
+
+def include_paths_from_entries(entries: list[dict]) -> list[str]:
+    return _merge(*(include_paths_from_entry(entry) for entry in entries))
+
+
+def defines_from_entries(entries: list[dict]) -> list[str]:
+    return _merge(*(defines_from_entry(entry) for entry in entries))
 
 
 def resolve_include_paths(
@@ -108,19 +137,59 @@ def resolve_include_paths(
     paths = [str(Path(path).resolve()) for path in config.include_paths]
     if compile_commands_path:
         try:
-            includes = include_paths_from_compile_commands(compile_commands_path)
+            entries = load_compile_commands(compile_commands_path)
         except (OSError, TypeError, ValueError):
-            includes = []
-        for include in includes:
-            if include not in paths:
-                paths.append(include)
+            entries = []
+        paths = _merge(paths, include_paths_from_entries(entries))
     return paths
 
 
-def tu_files(path: Path) -> list[Path]:
-    files: list[Path] = []
-    for entry in load_compile_commands(path):
-        file = entry_file(entry)
-        if file is not None:
-            files.append(file.resolve())
-    return files
+def resolve_defines(
+    config: Config, compile_commands_path: Path | None
+) -> list[str]:
+    defines = list(config.defines)
+    if compile_commands_path:
+        try:
+            entries = load_compile_commands(compile_commands_path)
+        except (OSError, TypeError, ValueError):
+            entries = []
+        defines = _merge(defines, defines_from_entries(entries))
+    return defines
+
+
+@dataclass
+class CompileFlags:
+    include_paths: list[str]
+    defines: list[str]
+    standard: str
+
+
+def compile_flags_for_file(
+    config: Config,
+    entries: list[dict] | None,
+    file: Path,
+) -> CompileFlags:
+    config_includes = [str(Path(path).resolve()) for path in config.include_paths]
+    if not entries:
+        return CompileFlags(
+            include_paths=config_includes,
+            defines=list(config.defines),
+            standard=config.cxx_standard,
+        )
+    if is_source(file):
+        resolved = file.resolve()
+        for entry in entries:
+            entry_path = entry_file(entry)
+            if entry_path is not None and entry_path.resolve() == resolved:
+                return CompileFlags(
+                    include_paths=_merge(
+                        config_includes, include_paths_from_entry(entry)
+                    ),
+                    defines=_merge(config.defines, defines_from_entry(entry)),
+                    standard=standard_from_entry(entry) or config.cxx_standard,
+                )
+    return CompileFlags(
+        include_paths=_merge(config_includes, include_paths_from_entries(entries)),
+        defines=_merge(config.defines, defines_from_entries(entries)),
+        standard=config.cxx_standard,
+    )

@@ -347,9 +347,9 @@ score, explain, suggest, compare), `guide`, `security`, `dependencies`, and
 - **libclang (`clang.cindex`)** — in-process AST metrics: class size, method
   length, nesting, cohesion, coupling, include graph, template depth.
 - **include-what-you-use** — header hygiene (optional, expensive).
-- **compile_commands.json** — preferred for accurate clang-based analysis; the
-  server auto-discovers it and falls back to header-aware single-file analysis
-  when it is absent.
+- **compile_commands.json** — used as a source of include paths, defines, and
+  the C++ standard; the server auto-discovers it and falls back to the config's
+  `include_paths`/`defines` when it is absent.
 
 **Version-aware discovery.** The server resolves `clang-tidy-{version}`,
 `clang-{version}`, `scan-build-{version}`, and `llvm-config-{version}` from a
@@ -362,12 +362,14 @@ sanitized environment (`clean_env`, default `LD_LIBRARY_PATH` removed) so a
 project's module environment does not break the versioned tools; the agent's
 build commands are unaffected.
 
-**Header coverage.** When `compile_commands.json` is present, clang-tidy runs
-on TUs with `-p` and cppcheck runs with `--project`. The server statically scans
-`#include` directives to map headers to TUs (no compiler runs), analyzes covered
-headers through one chosen TU, and falls back to single-file header analysis
-(`-x c++-header` / `--language=c++`) for uncovered headers. Header-only
-libraries need at least one TU in the database that includes the headers.
+**Header coverage.** The server analyzes files directly. `compile_commands.json`
+is used only as a source of include paths, defines, and the C++ standard:
+`.cpp` files use their own compile command, headers use the union of include
+paths/defines, and without a database the config's `include_paths`/`defines`
+are used. Header analysis uses `-x c++-header` for clang-tidy/libclang and
+`--language=c++` for cppcheck. Project-wide scans use a fast path (fast
+analyzers plus `cppcheck --project -j`); single-file and diff scans run the
+external analyzers directly. There is no translation-unit sweep.
 
 Normalise every tool's output into one **Finding** schema (SARIF is a good
 interchange format; cppcheck emits SARIF on stderr, clang-tidy emits text

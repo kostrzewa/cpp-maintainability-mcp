@@ -5,6 +5,9 @@
   "clean_env_vars": ["LD_LIBRARY_PATH"],
   "compile_commands": "build/compile_commands.json",
   "include_paths": ["include", "src"],
+  "defines": [],
+  "scan_mode": "auto",
+  "cppcheck_jobs": 0,
   "tool_paths": {
     "clang_tidy": "/usr/bin/clang-tidy-22",
     "cppcheck": "/usr/bin/cppcheck",

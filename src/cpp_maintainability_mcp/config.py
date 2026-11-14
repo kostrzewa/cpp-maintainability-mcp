@@ -48,7 +48,7 @@ DEFAULT_EXTENSIONS: tuple[str, ...] = (
 )
 
 DEFAULT_IGNORE: tuple[str, ...] = (
-    "build",
+    "build*",
     "third_party",
     "vendor",
     "external",
@@ -80,6 +80,9 @@ class Config:
     build_dir: str | None = None
     compile_commands: str | None = None
     include_paths: list[str] = field(default_factory=list)
+    defines: list[str] = field(default_factory=list)
+    scan_mode: str = "auto"
+    cppcheck_jobs: int = 0
     clang_version: str | None = None
     cxx_standard: str = "c++20"
     clang_tidy_checks: str | None = None
@@ -93,7 +96,7 @@ class Config:
     ignore_patterns: tuple[str, ...] = DEFAULT_IGNORE
     max_file_bytes: int = 2_000_000
     gate_threshold: float = 8.0
-    scan_timeout: float = 30.0
+    scan_timeout: float = 60.0
     clang_tidy_timeout: float = 120.0
     cppcheck_timeout: float = 60.0
     history_path: str = ".cpp-maintainability/history.sqlite3"
@@ -122,3 +125,7 @@ class Config:
         for name, (good, bad) in self.thresholds.items():
             if bad <= good:
                 raise ValueError(f"threshold for {name} must have bad > good")
+        if self.scan_mode not in ("auto", "fast", "direct"):
+            raise ValueError(
+                f"scan_mode must be auto, fast, or direct, got {self.scan_mode}"
+            )

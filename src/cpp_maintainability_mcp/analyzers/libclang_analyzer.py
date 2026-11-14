@@ -17,10 +17,12 @@ class LibclangAnalyzer(Analyzer):
         library_file: str | None = None,
         cxx_standard: str = "c++20",
         include_paths: list[str] | None = None,
+        defines: list[str] | None = None,
     ):
         self.library_file = library_file
         self.cxx_standard = cxx_standard
         self.include_paths = include_paths or []
+        self.defines = defines or []
         self._configured = False
 
     def _configure(self) -> None:
@@ -53,6 +55,7 @@ class LibclangAnalyzer(Analyzer):
         if is_header(path):
             args = ["-x", "c++-header", *args]
         args += [f"-I{include}" for include in self.include_paths]
+        args += self.defines
         return args
 
     def analyze(self, path: Path) -> AnalysisResult:

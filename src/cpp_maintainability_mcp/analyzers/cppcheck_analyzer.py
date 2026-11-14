@@ -22,36 +22,25 @@ class CppcheckAnalyzer(Analyzer):
         executable: str | None = "cppcheck",
         cxx_standard: str = "c++20",
         env: dict[str, str] | None = None,
-        compile_commands: Path | None = None,
         include_paths: list[str] | None = None,
+        defines: list[str] | None = None,
         timeout: float = 60.0,
+        jobs: int = 1,
     ):
         self.executable = executable
         self.cxx_standard = cxx_standard
         self.env = env
-        self.compile_commands = compile_commands
         self.include_paths = include_paths or []
+        self.defines = defines or []
         self.timeout = timeout
+        self.jobs = jobs
 
     def available(self) -> bool:
         return bool(self.executable) and shutil.which(self.executable) is not None
 
     def analyze(self, path: Path) -> AnalysisResult:
-        if self.compile_commands:
-            return self.analyze_project([path])
-        return self.analyze_direct(path)
-
-    def analyze_project(self, files: list[Path]) -> AnalysisResult:
-        command = [
-            self.executable,
-            f"--project={self.compile_commands}",
-            "--enable=warning,style,performance,portability",
-            "--output-format=sarif",
-            "--quiet",
-        ]
-        return self._run(command, files)
-
-    def analyze_direct(self, path: Path) -> AnalysisResult:
+        if not self.executable:
+            return AnalysisResult(status="unavailable")
         command = [
             self.executable,
             "--enable=warning,style,performance,portability",
@@ -62,12 +51,26 @@ class CppcheckAnalyzer(Analyzer):
         if is_header(path):
             command.append("--language=c++")
         command += [f"-I{include}" for include in self.include_paths]
+        command += self.defines
         command.append(str(path))
         return self._run(command, [path])
 
-    def _run(self, command: list[str], files: list[Path]) -> AnalysisResult:
+    def analyze_project(
+        self, compile_commands: Path, files: list[Path]
+    ) -> AnalysisResult:
         if not self.executable:
             return AnalysisResult(status="unavailable")
+        command = [
+            self.executable,
+            f"--project={compile_commands}",
+            "--enable=warning,style,performance,portability",
+            "--output-format=sarif",
+            "--quiet",
+            f"-j{self.jobs}",
+        ]
+        return self._run(command, files)
+
+    def _run(self, command: list[str], files: list[Path]) -> AnalysisResult:
         try:
             proc = subprocess.run(
                 command,

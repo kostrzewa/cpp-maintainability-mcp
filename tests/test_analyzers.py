@@ -10,10 +10,11 @@ class AnalyzerCommandTests(unittest.TestCase):
     def test_clang_tidy_command_uses_versioned_tool_and_standard(self):
         analyzer = ClangTidyAnalyzer(
             "/usr/bin/clang-tidy-22",
-            None,
             "c++20",
             "bugprone-*",
             {"LD_LIBRARY_PATH": None},
+            ["include"],
+            ["-DFOO=1"],
         )
         with patch("subprocess.run") as run:
             run.return_value = MagicMock(stdout="", stderr="", returncode=0)
@@ -22,13 +23,15 @@ class AnalyzerCommandTests(unittest.TestCase):
             self.assertEqual(command[0], "/usr/bin/clang-tidy-22")
             self.assertIn("-checks=bugprone-*", command)
             self.assertIn("-std=c++20", command)
+            self.assertIn("-Iinclude", command)
+            self.assertIn("-DFOO=1", command)
             self.assertEqual(
                 run.call_args.kwargs["env"], {"LD_LIBRARY_PATH": None}
             )
 
     def test_clang_tidy_omits_checks_when_project_config_exists(self):
         analyzer = ClangTidyAnalyzer(
-            "/usr/bin/clang-tidy-22", None, "c++20", None, {}
+            "/usr/bin/clang-tidy-22", "c++20", None, {}
         )
         with patch("subprocess.run") as run:
             run.return_value = MagicMock(stdout="", stderr="", returncode=0)
@@ -38,7 +41,7 @@ class AnalyzerCommandTests(unittest.TestCase):
 
     def test_cppcheck_command_uses_sarif_and_standard(self):
         analyzer = CppcheckAnalyzer(
-            "/usr/bin/cppcheck", "c++20", {"LD_LIBRARY_PATH": None}
+            "/usr/bin/cppcheck", "c++20", {}, ["include"], ["-DFOO=1"]
         )
         with patch("subprocess.run") as run:
             run.return_value = MagicMock(stdout="", stderr="", returncode=0)
@@ -47,9 +50,8 @@ class AnalyzerCommandTests(unittest.TestCase):
             self.assertEqual(command[0], "/usr/bin/cppcheck")
             self.assertIn("--output-format=sarif", command)
             self.assertIn("--std=c++20", command)
-            self.assertEqual(
-                run.call_args.kwargs["env"], {"LD_LIBRARY_PATH": None}
-            )
+            self.assertIn("-Iinclude", command)
+            self.assertIn("-DFOO=1", command)
 
     def test_unavailable_when_executable_missing(self):
         self.assertFalse(ClangTidyAnalyzer(None).available())
@@ -57,7 +59,7 @@ class AnalyzerCommandTests(unittest.TestCase):
 
     def test_low_priority_checks_are_deprioritized(self):
         analyzer = ClangTidyAnalyzer(
-            "/usr/bin/clang-tidy-22", None, "c++20", "bugprone-*", {}
+            "/usr/bin/clang-tidy-22", "c++20", "bugprone-*", {}
         )
         output = (
             "a.cpp:1:1: warning: swap "
@@ -67,7 +69,7 @@ class AnalyzerCommandTests(unittest.TestCase):
         )
         with patch("subprocess.run") as run:
             run.return_value = MagicMock(stdout=output, stderr="", returncode=0)
-            result = analyzer.analyze_direct(Path("a.cpp"))
+            result = analyzer.analyze(Path("a.cpp"))
         by_rule = {finding.rule: finding for finding in result.findings}
         swap = by_rule["clang-tidy:bugprone-easily-swappable-parameters"]
         magic = by_rule[

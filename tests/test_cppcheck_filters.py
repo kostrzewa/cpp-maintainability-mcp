@@ -43,7 +43,7 @@ class CppcheckFilterTests(unittest.TestCase):
         analyzer = CppcheckAnalyzer("/usr/bin/cppcheck", "c++20", {})
         with patch("subprocess.run") as run:
             run.return_value = MagicMock(stdout="", stderr=SARIF, returncode=0)
-            result = analyzer.analyze_direct(Path("a.cpp"))
+            result = analyzer.analyze(Path("a.cpp"))
         rules = [finding.rule for finding in result.findings]
         self.assertNotIn("cppcheck:normalCheckLevelMaxBranches", rules)
         self.assertEqual(rules.count("cppcheck:unusedStructMember"), 1)

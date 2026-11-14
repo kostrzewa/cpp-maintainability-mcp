@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import fnmatch
 import json
+import os
 import re
 import time
 from pathlib import Path
@@ -24,15 +25,13 @@ from .config import Config
 from .feedback import FeedbackEngine
 from .guide import GuideEngine
 from .history import HistoryStore
-from .includes import build_header_tu_map, choose_tu_per_header
 from .models import DimensionScore, FileScore, Finding, ProjectScore
 from .paths import (
+    compile_flags_for_file,
     find_compile_commands,
-    is_header,
-    is_source,
+    load_compile_commands,
+    resolve_defines,
     resolve_include_paths,
-    should_use_project_mode,
-    tu_files,
 )
 from .scoring import ScoringEngine
 from .toolchain import (
@@ -56,15 +55,33 @@ ANALYZER_CLASSES = {
 }
 
 
+def cppcheck_jobs(config: Config) -> int:
+    if config.cppcheck_jobs > 0:
+        return config.cppcheck_jobs
+    return max(1, (os.cpu_count() or 1) // 4)
+
+
+def scan_mode(config: Config, paths: list[str], diff: str | None) -> str:
+    if config.scan_mode in ("fast", "direct"):
+        return config.scan_mode
+    if diff:
+        return "direct"
+    if all(Path(path).is_file() for path in paths):
+        return "direct"
+    return "fast"
+
+
 def build_analyzers(
     config: Config,
-    compile_commands: Path | None = None,
     include_paths: list[str] | None = None,
+    defines: list[str] | None = None,
 ) -> list:
     analyzers = []
     env = tool_environment(config)
     checks = default_checks(config)
     include_paths = include_paths or []
+    defines = defines or []
+    jobs = cppcheck_jobs(config)
     for name in config.enabled_analyzers:
         analyzer_class = ANALYZER_CLASSES.get(name)
         if analyzer_class is None:
@@ -75,21 +92,21 @@ def build_analyzers(
                     resolve_cppcheck(config),
                     config.cxx_standard,
                     env,
-                    compile_commands,
                     include_paths,
+                    defines,
                     timeout=config.cppcheck_timeout,
+                    jobs=jobs,
                 )
             )
         elif name == "clang_tidy":
             analyzers.append(
                 analyzer_class(
                     resolve_clang_tidy(config),
-                    config.build_dir,
                     config.cxx_standard,
                     checks,
                     env,
-                    compile_commands,
                     include_paths,
+                    defines,
                     timeout=config.clang_tidy_timeout,
                 )
             )
@@ -99,6 +116,7 @@ def build_analyzers(
                     resolve_libclang(config),
                     config.cxx_standard,
                     include_paths,
+                    defines,
                 )
             )
         else:
@@ -135,13 +153,10 @@ def resolve_files(paths: list[str], config: Config) -> list[Path]:
 
 
 def _ignored(path: Path, patterns: tuple[str, ...]) -> bool:
-    parts = set(path.parts)
-    for pattern in patterns:
-        pattern = pattern.rstrip("/")
-        if pattern in parts:
-            return True
-        if fnmatch.fnmatch(path.name, pattern):
-            return True
+    for part in path.parts:
+        for pattern in patterns:
+            if fnmatch.fnmatch(part, pattern.rstrip("/")):
+                return True
     return False
 
 
@@ -283,54 +298,40 @@ class MaintainabilityEngine:
         diff: str | None = None,
         repo: str = ".",
     ) -> ProjectScore:
+        deadline = time.monotonic() + self.config.scan_timeout
         files = resolve_files(paths, self.config)
         diff_map = parse_diff(diff) if diff else None
         if diff_map is not None:
             files = [file for file in files if _matches_diff_file(file, diff_map)]
 
-        scanned_headers = {file.resolve() for file in files if is_header(file)}
         compile_commands_path = find_compile_commands(self.config, paths)
-        include_paths = resolve_include_paths(self.config, compile_commands_path)
-        use_project_mode = (
-            compile_commands_path is not None
-            and should_use_project_mode(paths)
-        )
-        header_map: dict[Path, list[Path]] = {}
-        if use_project_mode:
+        entries = None
+        if compile_commands_path is not None:
             try:
-                header_map = build_header_tu_map(
-                    compile_commands_path, targets=scanned_headers
-                )
+                entries = load_compile_commands(compile_commands_path)
             except (OSError, TypeError, ValueError):
                 compile_commands_path = None
-        else:
-            compile_commands_path = None
-        self.analyzers = build_analyzers(
-            self.config, compile_commands_path, include_paths
-        )
-
-        chosen = choose_tu_per_header(header_map, scanned_headers)
-        uncovered_headers = scanned_headers - set(chosen)
-        tu_set = (
-            set(tu_files(compile_commands_path))
-            if compile_commands_path is not None
-            else set()
-        )
-        uncovered_sources = {
-            file.resolve()
-            for file in files
-            if is_source(file) and file.resolve() not in tu_set
-        }
+        include_paths = resolve_include_paths(self.config, compile_commands_path)
+        defines = resolve_defines(self.config, compile_commands_path)
+        mode = scan_mode(self.config, paths, diff)
+        self.analyzers = build_analyzers(self.config, include_paths, defines)
 
         findings: list[Finding] = []
         metrics_by_file: dict[str, dict[str, float]] = {
             str(file.resolve()): {} for file in files
         }
         tools: dict[str, str] = {}
-        deadline = time.monotonic() + self.config.scan_timeout
+        fast_names = {"heuristic", "lizard", "headers", "cognitive", "testability"}
 
         for analyzer in self.analyzers:
             if analyzer.name == "duplication":
+                continue
+            if (
+                mode == "fast"
+                and analyzer.name not in fast_names
+                and analyzer.name != "cppcheck"
+            ):
+                tools[analyzer.name] = "skipped"
                 continue
             if time.monotonic() >= deadline:
                 tools[analyzer.name] = "timeout"
@@ -342,31 +343,31 @@ class MaintainabilityEngine:
             remaining = max(1.0, deadline - time.monotonic())
             if hasattr(analyzer, "timeout"):
                 analyzer.timeout = min(analyzer.timeout, remaining)
-            if analyzer.name == "cppcheck" and compile_commands_path:
-                findings.extend(analyzer.analyze_project(files).findings)
-                for header in sorted(uncovered_headers):
-                    findings.extend(analyzer.analyze_direct(header).findings)
-                for source in sorted(uncovered_sources):
-                    findings.extend(analyzer.analyze_direct(source).findings)
+            if mode == "fast" and analyzer.name == "cppcheck":
+                if compile_commands_path is None:
+                    tools[analyzer.name] = "skipped"
+                    continue
+                findings.extend(
+                    analyzer.analyze_project(compile_commands_path, files).findings
+                )
                 continue
-            if analyzer.name == "clang_tidy" and compile_commands_path:
-                tu_to_headers: dict[Path, list[Path]] = {}
-                for header, tu in chosen.items():
-                    tu_to_headers.setdefault(tu, []).append(header)
-                for tu in sorted(tu_to_headers):
-                    analyzer.header_filter = "|".join(
-                        re.escape(str(header)) for header in tu_to_headers[tu]
-                    )
-                    findings.extend(analyzer.analyze_tu(tu).findings)
-                for header in sorted(uncovered_headers):
-                    findings.extend(analyzer.analyze_direct(header).findings)
-                for source in sorted(uncovered_sources):
-                    findings.extend(analyzer.analyze_direct(source).findings)
-                continue
-            for file in files:
-                result = analyzer.analyze(file)
-                findings.extend(result.findings)
-                metrics_by_file[str(file.resolve())].update(result.metrics)
+            if mode == "direct":
+                for file in files:
+                    flags = compile_flags_for_file(self.config, entries, file)
+                    if hasattr(analyzer, "include_paths"):
+                        analyzer.include_paths = flags.include_paths
+                    if hasattr(analyzer, "defines"):
+                        analyzer.defines = flags.defines
+                    if hasattr(analyzer, "cxx_standard"):
+                        analyzer.cxx_standard = flags.standard
+                    result = analyzer.analyze(file)
+                    findings.extend(result.findings)
+                    metrics_by_file[str(file.resolve())].update(result.metrics)
+            else:
+                for file in files:
+                    result = analyzer.analyze(file)
+                    findings.extend(result.findings)
+                    metrics_by_file[str(file.resolve())].update(result.metrics)
 
         duplication = next(
             (analyzer for analyzer in self.analyzers if analyzer.name == "duplication"),
@@ -389,25 +390,23 @@ class MaintainabilityEngine:
         findings = _dedupe_findings(findings)
 
         file_by_resolved: dict[Path, Path] = {file.resolve(): file for file in files}
+        findings_by_resolved: dict[Path, list[Finding]] = {}
         for finding in findings:
             path = Path(finding.file)
             try:
-                file_by_resolved.setdefault(path.resolve(), path)
+                resolved = path.resolve()
             except OSError:
                 continue
+            findings_by_resolved.setdefault(resolved, []).append(finding)
+            file_by_resolved.setdefault(resolved, path)
 
         file_scores = []
         for resolved, display in sorted(file_by_resolved.items()):
-            file_findings = [
-                finding
-                for finding in findings
-                if Path(finding.file).resolve() == resolved
-            ]
             file_scores.append(
                 self.scoring.score_file(
                     str(display),
                     metrics_by_file.get(str(resolved), {}),
-                    file_findings,
+                    findings_by_resolved.get(resolved, []),
                 )
             )
 

@@ -1,10 +1,11 @@
+import json
 import shutil
 import tempfile
 import unittest
 from pathlib import Path
 
 from cpp_maintainability_mcp.config import Config
-from cpp_maintainability_mcp.engine import MaintainabilityEngine
+from cpp_maintainability_mcp.engine import MaintainabilityEngine, scan_mode
 
 
 def make_engine(tmp: str) -> MaintainabilityEngine:
@@ -31,7 +32,6 @@ class EngineTests(unittest.TestCase):
             self.assertGreaterEqual(project.score, 1.0)
             self.assertLessEqual(project.score, 10.0)
             self.assertEqual(len(project.files), 1)
-            engine.close()
             self.assertIn("heuristic", project.tools)
             engine.close()
 
@@ -70,6 +70,65 @@ class EngineTests(unittest.TestCase):
             project = engine.scan([str(source)], diff=diff, repo="test")
             self.assertEqual(len(project.files), 1)
             engine.close()
+
+    def test_scan_mode_selection(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "a.cpp"
+            source.write_text("")
+            self.assertEqual(scan_mode(Config(), [str(source)], None), "direct")
+            self.assertEqual(scan_mode(Config(), [str(root)], None), "fast")
+            self.assertEqual(scan_mode(Config(), [str(root)], "diff"), "direct")
+            self.assertEqual(
+                scan_mode(Config(scan_mode="fast"), [str(source)], None), "fast"
+            )
+            self.assertEqual(
+                scan_mode(Config(scan_mode="direct"), [str(root)], None), "direct"
+            )
+
+    @unittest.skipUnless(shutil.which("cppcheck"), "cppcheck is required")
+    def test_fast_project_scan_skips_clang_tidy(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "a.cpp"
+            source.write_text("int main() { return 0; }\n")
+            database = root / "compile_commands.json"
+            database.write_text(
+                json.dumps(
+                    [
+                        {
+                            "directory": str(root),
+                            "arguments": [
+                                "clang++",
+                                "-std=c++20",
+                                "-c",
+                                "a.cpp",
+                            ],
+                            "file": "a.cpp",
+                        }
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            config = Config(
+                history_path=str(root / "history.sqlite3"),
+                scan_mode="fast",
+                enabled_analyzers=[
+                    "lizard",
+                    "headers",
+                    "cognitive",
+                    "testability",
+                    "cppcheck",
+                    "clang_tidy",
+                    "libclang",
+                ],
+            )
+            engine = MaintainabilityEngine(config=config)
+            project = engine.scan([str(root)], repo="test")
+            engine.close()
+            self.assertEqual(project.tools.get("clang_tidy"), "skipped")
+            self.assertEqual(project.tools.get("libclang"), "skipped")
+            self.assertEqual(project.tools.get("cppcheck"), "ok")
 
     @unittest.skipUnless(
         shutil.which("clang-tidy-22") and shutil.which("cppcheck"),
