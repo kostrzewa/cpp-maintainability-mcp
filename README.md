@@ -39,7 +39,7 @@ It runs as a **local stdio process** — no Docker, no hosted service.
 ./scripts/bootstrap.sh
 
 # 2. Optional: tune the server for your C++ project
-cp cpp-maintainability.example.json /path/to/cpp-project/cpp-maintainability.json
+cp examples/cpp-maintainability.example.json /path/to/cpp-project/cpp-maintainability.json
 
 # 3. Add the MCP server to opencode (see below), restart opencode, then:
 opencode mcp list
@@ -89,6 +89,14 @@ Start the server directly (it speaks MCP over stdio; Ctrl-C to stop):
 The server is a local MCP server. Add it to the **project** config
 (`opencode.json` in the C++ project root) or the **global** config
 (`~/.config/opencode/opencode.jsonc`).
+
+Ready-made examples:
+
+- [`examples/opencode.json`](examples/opencode.json) — opencode 1.19.5 legacy shape
+- [`examples/opencode.v2.json`](examples/opencode.v2.json) — V2 shape
+
+The examples use absolute paths from this machine. Replace them with your
+checkout path, or generate a project config with `scripts/opencode_config.py`.
 
 ### opencode 1.19.5 (legacy shape)
 
@@ -206,7 +214,7 @@ guide → agent writes C++ → maintainability_scan(diff)
 
 The server reads `cpp-maintainability.json` from its working directory (the C++
 project root when `cwd` is omitted). Start from
-[`cpp-maintainability.example.json`](cpp-maintainability.example.json):
+[`examples/cpp-maintainability.example.json`](examples/cpp-maintainability.example.json):
 
 ```json
 {
@@ -229,6 +237,8 @@ project root when `cwd` is omitted). Start from
 | `tool_paths` | `{}` | Explicit paths for `clang_tidy`, `cppcheck`, `libclang`, `clang`, `scan_build` |
 | `libclang_library` | auto-detect | Explicit `libclang.so` path |
 | `build_dir` | unset | `compile_commands.json` directory for clang-tidy |
+| `compile_commands` | auto-discover | Path to `compile_commands.json` or its directory |
+| `include_paths` | `[]` | Extra `-I` paths for direct-header and libclang analysis |
 | `enabled_analyzers` | all | Subset of `heuristic`, `duplication`, `headers`, `cognitive`, `testability`, `lizard`, `cppcheck`, `clang_tidy`, `libclang` |
 | `weights` | see `config.py` | Per-dimension weights; must sum to 1.0 |
 | `thresholds` | see `config.py` | `(good, bad)` thresholds per dimension |
@@ -265,6 +275,43 @@ libclang is resolved from:
 
 The Python bindings are loaded in-process with
 `clang.cindex.Config.set_library_file(...)`.
+
+## Header analysis
+
+The server uses a hybrid header strategy:
+
+- If `compile_commands.json` is found, clang-tidy runs on the translation units
+  with `-p`, and cppcheck runs with `--project`. Findings in included headers
+  are attributed to the header paths.
+- The server statically scans `#include` directives to map headers to TUs. It
+  does not run the compiler for this step, so build configuration is respected
+  through the include paths already recorded in `compile_commands.json`.
+- A header covered by a TU is analyzed through one chosen TU. A header not
+  covered by any TU falls back to single-file analysis:
+  - clang-tidy: `-- -x c++-header -std=c++20 -I...`
+  - cppcheck: `--language=c++ -I...`
+- Header-only libraries need at least one TU in `compile_commands.json` (a
+  test, example, or generated TU) that includes the headers. Headers outside
+  that coverage still get the single-file fallback.
+
+Generate `compile_commands.json` with your build system:
+
+```sh
+# CMake
+cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+
+# Meson
+meson setup build
+
+# Make (Bear)
+bear -- make
+
+# Bazel
+bazel run @hedron_compile_commands//:refresh_all
+```
+
+Set `compile_commands` if the file is not in the project root or `build_dir`,
+and `include_paths` if the single-file fallback needs extra `-I` paths.
 
 ## Troubleshooting
 
@@ -329,6 +376,7 @@ src/cpp_maintainability_mcp/
 tests/               # unittest suite
 tests/fixtures/      # C++ baseline samples (god class, leak, duplication, ...)
 scripts/             # bootstrap, toolchain check, opencode config
+examples/            # ready-made opencode and server configs
 references/          # paper corpus and design synthesis
 ```
 

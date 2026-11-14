@@ -347,8 +347,9 @@ score, explain, suggest, compare), `guide`, `security`, `dependencies`, and
 - **libclang (`clang.cindex`)** — in-process AST metrics: class size, method
   length, nesting, cohesion, coupling, include graph, template depth.
 - **include-what-you-use** — header hygiene (optional, expensive).
-- **compile_commands.json** — required for accurate clang-based analysis; the
-  server should locate or generate it.
+- **compile_commands.json** — preferred for accurate clang-based analysis; the
+  server auto-discovers it and falls back to header-aware single-file analysis
+  when it is absent.
 
 **Version-aware discovery.** The server resolves `clang-tidy-{version}`,
 `clang-{version}`, `scan-build-{version}`, and `llvm-config-{version}` from a
@@ -360,6 +361,13 @@ to the unversioned names. `cppcheck` is resolved as `cppcheck-{version}` then
 sanitized environment (`clean_env`, default `LD_LIBRARY_PATH` removed) so a
 project's module environment does not break the versioned tools; the agent's
 build commands are unaffected.
+
+**Header coverage.** When `compile_commands.json` is present, clang-tidy runs
+on TUs with `-p` and cppcheck runs with `--project`. The server statically scans
+`#include` directives to map headers to TUs (no compiler runs), analyzes covered
+headers through one chosen TU, and falls back to single-file header analysis
+(`-x c++-header` / `--language=c++`) for uncovered headers. Header-only
+libraries need at least one TU in the database that includes the headers.
 
 Normalise every tool's output into one **Finding** schema (SARIF is a good
 interchange format; cppcheck emits SARIF on stderr, clang-tidy emits text

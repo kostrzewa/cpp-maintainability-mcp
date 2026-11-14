@@ -14,6 +14,7 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from cpp_maintainability_mcp.config import Config
+from cpp_maintainability_mcp.paths import find_compile_commands
 from cpp_maintainability_mcp.toolchain import (
     detect_clang_version,
     resolve_clang_tidy,
@@ -65,6 +66,7 @@ def main() -> int:
     cppcheck = resolve_cppcheck(config)
     libclang = resolve_libclang(config)
     bindings_ok, bindings_detail = check_libclang_bindings(libclang)
+    compile_commands = find_compile_commands(config, [str(Path.cwd())])
 
     checks = [
         ("clang version", version or "not detected", bool(version)),
@@ -72,6 +74,11 @@ def main() -> int:
         ("cppcheck", cppcheck or "not found", bool(cppcheck)),
         ("libclang", libclang or "not found", bool(libclang)),
         ("clang.cindex", bindings_detail, bindings_ok),
+        (
+            "compile_commands",
+            str(compile_commands) if compile_commands else "not found",
+            compile_commands is not None,
+        ),
     ]
 
     if args.json:
@@ -86,6 +93,10 @@ def main() -> int:
                         "ok": bindings_ok,
                         "detail": bindings_detail,
                     },
+                    "compile_commands": (
+                        str(compile_commands) if compile_commands else None
+                    ),
+                    "header_mode": "tu" if compile_commands else "direct",
                 },
                 indent=2,
             )
@@ -94,10 +105,15 @@ def main() -> int:
         print("Maintainability MCP toolchain\n")
         for name, value, ok in checks:
             status = "ok" if ok else "missing"
-            print(f"  {name:<14} {status:<8} {value}")
+            print(f"  {name:<16} {status:<8} {value}")
         print()
-        if all(ok for _, _, ok in checks):
-            print("All tools are available.")
+        mode = "TU context" if compile_commands else "direct-header fallback"
+        print(f"Header mode: {mode}")
+        required_ok = all(
+            ok for name, _, ok in checks if name != "compile_commands"
+        )
+        if required_ok:
+            print("All required tools are available.")
         else:
             print("Some tools are missing. The server still runs with the")
             print("pure-Python fallbacks, but clang-tidy/cppcheck/libclang")

@@ -4,6 +4,8 @@
   "clang_tidy_checks": "bugprone-*,readability-*,performance-*,cppcoreguidelines-*",
   "clean_env": true,
   "clean_env_vars": ["LD_LIBRARY_PATH"],
+  "compile_commands": "build/compile_commands.json",
+  "include_paths": ["include", "src"],
   "tool_paths": {
     "clang_tidy": "/usr/bin/clang-tidy-22",
     "cppcheck": "/usr/bin/cppcheck",

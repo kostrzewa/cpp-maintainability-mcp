@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from ..models import AnalysisResult, make_finding
+from ..paths import is_header
 from .base import Analyzer
 
 
@@ -15,9 +16,11 @@ class LibclangAnalyzer(Analyzer):
         self,
         library_file: str | None = None,
         cxx_standard: str = "c++20",
+        include_paths: list[str] | None = None,
     ):
         self.library_file = library_file
         self.cxx_standard = cxx_standard
+        self.include_paths = include_paths or []
         self._configured = False
 
     def _configure(self) -> None:
@@ -45,15 +48,20 @@ class LibclangAnalyzer(Analyzer):
         except Exception:  # noqa: BLE001 - libclang raises backend-specific errors
             return False
 
+    def _parse_args(self, path: Path) -> list[str]:
+        args = [f"-std={self.cxx_standard}"]
+        if is_header(path):
+            args = ["-x", "c++-header", *args]
+        args += [f"-I{include}" for include in self.include_paths]
+        return args
+
     def analyze(self, path: Path) -> AnalysisResult:
         import clang.cindex as ci
 
         try:
             self._configure()
             index = ci.Index.create()
-            translation_unit = index.parse(
-                str(path), args=[f"-std={self.cxx_standard}"]
-            )
+            translation_unit = index.parse(str(path), args=self._parse_args(path))
         except Exception:  # noqa: BLE001 - libclang raises backend-specific errors
             return AnalysisResult(status="error")
 

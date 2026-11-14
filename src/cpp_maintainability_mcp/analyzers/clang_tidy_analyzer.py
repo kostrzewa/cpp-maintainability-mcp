@@ -8,6 +8,7 @@ import subprocess
 from pathlib import Path
 
 from ..models import AnalysisResult, make_finding
+from ..paths import is_header
 from .base import Analyzer
 
 DIAGNOSTIC_RE = re.compile(
@@ -25,25 +26,47 @@ class ClangTidyAnalyzer(Analyzer):
         cxx_standard: str = "c++20",
         checks: str | None = None,
         env: dict[str, str] | None = None,
+        compile_commands: Path | None = None,
+        include_paths: list[str] | None = None,
     ):
         self.executable = executable
         self.build_dir = build_dir
         self.cxx_standard = cxx_standard
         self.checks = checks
         self.env = env
+        self.compile_commands = compile_commands
+        self.include_paths = include_paths or []
 
     def available(self) -> bool:
         return bool(self.executable) and shutil.which(self.executable) is not None
 
     def analyze(self, path: Path) -> AnalysisResult:
-        if not self.executable:
-            return AnalysisResult(status="unavailable")
+        if self.compile_commands:
+            return self.analyze_tu(path)
+        return self.analyze_direct(path)
+
+    def analyze_tu(self, path: Path) -> AnalysisResult:
         command = [self.executable]
-        if self.build_dir:
-            command += ["-p", self.build_dir]
+        command += ["-p", str(self.compile_commands.parent)]
         if self.checks:
             command += [f"-checks={self.checks}"]
-        command += [str(path), "--", f"-std={self.cxx_standard}"]
+        command.append(str(path))
+        return self._run(command)
+
+    def analyze_direct(self, path: Path) -> AnalysisResult:
+        command = [self.executable]
+        if self.checks:
+            command += [f"-checks={self.checks}"]
+        command += [str(path), "--"]
+        if is_header(path):
+            command += ["-x", "c++-header"]
+        command += [f"-std={self.cxx_standard}"]
+        command += [f"-I{include}" for include in self.include_paths]
+        return self._run(command)
+
+    def _run(self, command: list[str]) -> AnalysisResult:
+        if not self.executable:
+            return AnalysisResult(status="unavailable")
         try:
             proc = subprocess.run(
                 command,
@@ -83,12 +106,12 @@ class ClangTidyAnalyzer(Analyzer):
                     analyzer=self.name,
                 )
             )
-        return AnalysisResult(
-            findings=findings, metrics={"static_analysis": float(len(findings))}
-        )
+        return AnalysisResult(findings=findings)
 
     @staticmethod
     def _dimension(check: str) -> str:
+        if "magic-number" in check:
+            return "cognitive_intent"
         if check.startswith("readability-"):
             return "cognitive_intent"
         if check.startswith(("cppcoreguidelines-", "cert-")):

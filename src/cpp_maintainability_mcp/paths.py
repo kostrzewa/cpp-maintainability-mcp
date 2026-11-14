@@ -1,0 +1,122 @@
+"""Filesystem, compile-command, and include-path helpers."""
+
+from __future__ import annotations
+
+import json
+import shlex
+from pathlib import Path
+
+from .config import Config
+
+HEADER_EXTENSIONS = {".h", ".hpp", ".hxx", ".hh"}
+SOURCE_EXTENSIONS = {".cpp", ".cc", ".cxx", ".c++"}
+
+
+def is_header(path: str | Path) -> bool:
+    return Path(path).suffix.lower() in HEADER_EXTENSIONS
+
+
+def is_source(path: str | Path) -> bool:
+    return Path(path).suffix.lower() in SOURCE_EXTENSIONS
+
+
+def find_compile_commands(config: Config, roots: list[str]) -> Path | None:
+    if config.compile_commands:
+        path = Path(config.compile_commands)
+        if path.is_dir():
+            path = path / "compile_commands.json"
+        if path.is_file():
+            return path.resolve()
+    if config.build_dir:
+        path = Path(config.build_dir) / "compile_commands.json"
+        if path.is_file():
+            return path.resolve()
+    for root in roots:
+        base = Path(root)
+        base = base if base.is_dir() else base.parent
+        for parent in (base, *base.parents):
+            candidate = parent / "compile_commands.json"
+            if candidate.is_file():
+                return candidate.resolve()
+    return None
+
+
+def load_compile_commands(path: Path) -> list[dict]:
+    data = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(data, list):
+        raise TypeError(f"{path} is not a compile_commands.json array")
+    return data
+
+
+def entry_arguments(entry: dict) -> list[str]:
+    if "arguments" in entry:
+        return [str(arg) for arg in entry["arguments"]]
+    command = entry.get("command")
+    return shlex.split(command) if command else []
+
+
+def entry_directory(entry: dict) -> Path:
+    return Path(entry.get("directory", ".")).resolve()
+
+
+def entry_file(entry: dict) -> Path | None:
+    file = entry.get("file")
+    if not file:
+        return None
+    path = Path(file)
+    return path if path.is_absolute() else entry_directory(entry) / path
+
+
+def include_paths_from_entry(entry: dict) -> list[str]:
+    directory = entry_directory(entry)
+    paths: list[str] = []
+    arguments = entry_arguments(entry)
+    index = 0
+    while index < len(arguments):
+        argument = arguments[index]
+        if argument in ("-I", "-isystem", "-iquote"):
+            if index + 1 < len(arguments):
+                paths.append(str((directory / arguments[index + 1]).resolve()))
+                index += 2
+                continue
+        elif argument.startswith("-I") and len(argument) > 2:
+            paths.append(str((directory / argument[2:]).resolve()))
+        elif argument.startswith("-isystem") and len(argument) > len("-isystem"):
+            paths.append(str((directory / argument[len("-isystem") :]).resolve()))
+        elif argument.startswith("-iquote") and len(argument) > len("-iquote"):
+            paths.append(str((directory / argument[len("-iquote") :]).resolve()))
+        index += 1
+    return list(dict.fromkeys(paths))
+
+
+def include_paths_from_compile_commands(path: Path) -> list[str]:
+    paths: list[str] = []
+    for entry in load_compile_commands(path):
+        for include in include_paths_from_entry(entry):
+            if include not in paths:
+                paths.append(include)
+    return paths
+
+
+def resolve_include_paths(
+    config: Config, compile_commands_path: Path | None
+) -> list[str]:
+    paths = [str(Path(path).resolve()) for path in config.include_paths]
+    if compile_commands_path:
+        try:
+            includes = include_paths_from_compile_commands(compile_commands_path)
+        except (OSError, TypeError, ValueError):
+            includes = []
+        for include in includes:
+            if include not in paths:
+                paths.append(include)
+    return paths
+
+
+def tu_files(path: Path) -> list[Path]:
+    files: list[Path] = []
+    for entry in load_compile_commands(path):
+        file = entry_file(entry)
+        if file is not None:
+            files.append(file.resolve())
+    return files

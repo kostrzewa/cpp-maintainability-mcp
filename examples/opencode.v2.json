@@ -1,0 +1,19 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "servers": {
+      "cpp-maintainability": {
+        "type": "local",
+        "command": [
+          "/home/bartek/code/cpp-maintainability-mcp/.venv/bin/python",
+          "-m",
+          "cpp_maintainability_mcp"
+        ],
+        "environment": {
+          "PYTHONPATH": "/home/bartek/code/cpp-maintainability-mcp/src"
+        },
+        "codemode": false
+      }
+    }
+  }
+}

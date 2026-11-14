@@ -1,3 +1,4 @@
+import json
 import shutil
 import tempfile
 import unittest
@@ -94,6 +95,63 @@ class FixtureTests(unittest.TestCase):
             )
             rules = {finding.rule for finding in project.findings}
             self.assertIn("god-class", rules)
+
+    @unittest.skipUnless(
+        (shutil.which("clang-tidy-22") or shutil.which("clang-tidy"))
+        and shutil.which("cppcheck"),
+        "clang-tidy and cppcheck are required",
+    )
+    def test_tu_mode_and_uncovered_fallback(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            database = Path(tmp) / "compile_commands.json"
+            database.write_text(
+                json.dumps(
+                    [
+                        {
+                            "directory": str(FIXTURES),
+                            "arguments": [
+                                "clang++",
+                                "-std=c++20",
+                                "-I",
+                                str(FIXTURES),
+                                "-c",
+                                "fixture_tu.cpp",
+                            ],
+                            "file": "fixture_tu.cpp",
+                        }
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            config = Config(
+                history_path=str(Path(tmp) / "history.sqlite3"),
+                enabled_analyzers=["headers", "clang_tidy", "cppcheck"],
+                compile_commands=str(database),
+                include_paths=[str(FIXTURES)],
+            )
+            engine = MaintainabilityEngine(config=config)
+            project = engine.scan([str(FIXTURES)], repo="fixtures")
+            engine.close()
+            rules = {finding.rule for finding in project.findings}
+            self.assertIn("missing-include-guard", rules)
+            self.assertEqual(project.tools.get("clang_tidy"), "ok")
+            self.assertEqual(project.tools.get("cppcheck"), "ok")
+
+    @unittest.skipUnless(
+        (shutil.which("clang-tidy-22") or shutil.which("clang-tidy"))
+        and shutil.which("cppcheck"),
+        "clang-tidy and cppcheck are required",
+    )
+    def test_direct_header_fallback_has_no_mode_errors(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project = scan(
+                FIXTURES / "bad_header.h",
+                tmp,
+                ["clang_tidy", "cppcheck"],
+            )
+            rules = {finding.rule for finding in project.findings}
+            self.assertNotIn("clang-tidy:clang-diagnostic-error", rules)
+            self.assertNotIn("cppcheck:syntaxError", rules)
 
 
 if __name__ == "__main__":

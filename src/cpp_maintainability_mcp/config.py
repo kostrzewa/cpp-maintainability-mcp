@@ -78,6 +78,8 @@ class Config:
     enabled_analyzers: list[str] = field(default_factory=lambda: list(DEFAULT_ANALYZERS))
     tool_paths: dict[str, str] = field(default_factory=dict)
     build_dir: str | None = None
+    compile_commands: str | None = None
+    include_paths: list[str] = field(default_factory=list)
     clang_version: str | None = None
     cxx_standard: str = "c++20"
     clang_tidy_checks: str | None = None

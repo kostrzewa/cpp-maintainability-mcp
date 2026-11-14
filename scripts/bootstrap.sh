@@ -98,7 +98,7 @@ Bootstrap complete.
 
 Next steps:
   1. Optional: copy the example config into your C++ project:
-       cp "$ROOT/cpp-maintainability.example.json" /path/to/cpp-project/cpp-maintainability.json
+       cp "$ROOT/examples/cpp-maintainability.example.json" /path/to/cpp-project/cpp-maintainability.json
 
   2. Add the MCP server to opencode (1.19.5 legacy shape):
 

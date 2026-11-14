@@ -6,9 +6,9 @@ import re
 from pathlib import Path
 
 from ..models import AnalysisResult, make_finding
+from ..paths import HEADER_EXTENSIONS
 from .base import Analyzer
 
-HEADER_EXTENSIONS = {".h", ".hpp", ".hxx", ".hh"}
 HEAVY_INCLUDES = {
     "algorithm",
     "fstream",

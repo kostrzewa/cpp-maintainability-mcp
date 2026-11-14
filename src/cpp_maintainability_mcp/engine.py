@@ -23,7 +23,15 @@ from .config import Config
 from .feedback import FeedbackEngine
 from .guide import GuideEngine
 from .history import HistoryStore
+from .includes import build_header_tu_map, choose_tu_per_header
 from .models import DimensionScore, FileScore, Finding, ProjectScore
+from .paths import (
+    find_compile_commands,
+    is_header,
+    is_source,
+    resolve_include_paths,
+    tu_files,
+)
 from .scoring import ScoringEngine
 from .toolchain import (
     default_checks,
@@ -46,10 +54,15 @@ ANALYZER_CLASSES = {
 }
 
 
-def build_analyzers(config: Config) -> list:
+def build_analyzers(
+    config: Config,
+    compile_commands: Path | None = None,
+    include_paths: list[str] | None = None,
+) -> list:
     analyzers = []
     env = tool_environment(config)
     checks = default_checks(config)
+    include_paths = include_paths or []
     for name in config.enabled_analyzers:
         analyzer_class = ANALYZER_CLASSES.get(name)
         if analyzer_class is None:
@@ -60,6 +73,8 @@ def build_analyzers(config: Config) -> list:
                     resolve_cppcheck(config),
                     config.cxx_standard,
                     env,
+                    compile_commands,
+                    include_paths,
                 )
             )
         elif name == "clang_tidy":
@@ -70,6 +85,8 @@ def build_analyzers(config: Config) -> list:
                     config.cxx_standard,
                     checks,
                     env,
+                    compile_commands,
+                    include_paths,
                 )
             )
         elif name == "libclang":
@@ -77,6 +94,7 @@ def build_analyzers(config: Config) -> list:
                 analyzer_class(
                     resolve_libclang(config),
                     config.cxx_standard,
+                    include_paths,
                 )
             )
         else:
@@ -166,6 +184,48 @@ def _in_diff(
     return any(start <= finding.start_line <= end for start, end in ranges)
 
 
+def _in_scan_scope(file: str, roots: list[str]) -> bool:
+    try:
+        path = Path(file).resolve()
+    except OSError:
+        return False
+    for root in roots:
+        try:
+            base = Path(root).resolve()
+        except OSError:
+            continue
+        if base.is_file():
+            if path == base:
+                return True
+        elif path == base or path.is_relative_to(base):
+            return True
+    return False
+
+
+def _finding_priority(finding: Finding) -> tuple[int, float]:
+    severity = {"error": 2, "warning": 1, "info": 0}.get(finding.severity, 0)
+    return (severity, finding.confidence)
+
+
+def _dedupe_key(finding: Finding) -> tuple[str, int, str, str]:
+    try:
+        resolved = str(Path(finding.file).resolve())
+    except OSError:
+        resolved = finding.file
+    rule = "magic-number" if "magic-number" in finding.rule else finding.rule
+    return (resolved, finding.start_line, finding.dimension, rule)
+
+
+def _dedupe_findings(findings: list[Finding]) -> list[Finding]:
+    by_key: dict[tuple[str, int, str, str], Finding] = {}
+    for finding in findings:
+        key = _dedupe_key(finding)
+        current = by_key.get(key)
+        if current is None or _finding_priority(finding) > _finding_priority(current):
+            by_key[key] = finding
+    return list(by_key.values())
+
+
 def _project_from_dict(payload: dict[str, Any]) -> ProjectScore:
     files = [
         FileScore(
@@ -205,7 +265,7 @@ class MaintainabilityEngine:
         self.config = config or Config.load()
         self.config.validate()
         self.history = history or HistoryStore(self.config.history_path)
-        self.analyzers = build_analyzers(self.config)
+        self.analyzers: list = []
         self.scoring = ScoringEngine(self.config)
         self.feedback = FeedbackEngine(self.config)
         self.guide_engine = GuideEngine(self.config, self.history)
@@ -222,9 +282,35 @@ class MaintainabilityEngine:
         if diff_map is not None:
             files = [file for file in files if _matches_diff_file(file, diff_map)]
 
+        compile_commands_path = find_compile_commands(self.config, paths)
+        include_paths = resolve_include_paths(self.config, compile_commands_path)
+        header_map: dict[Path, list[Path]] = {}
+        if compile_commands_path is not None:
+            try:
+                header_map = build_header_tu_map(compile_commands_path)
+            except (OSError, TypeError, ValueError):
+                compile_commands_path = None
+        self.analyzers = build_analyzers(
+            self.config, compile_commands_path, include_paths
+        )
+
+        scanned_headers = {file.resolve() for file in files if is_header(file)}
+        chosen = choose_tu_per_header(header_map, scanned_headers)
+        uncovered_headers = scanned_headers - set(chosen)
+        tu_set = (
+            set(tu_files(compile_commands_path))
+            if compile_commands_path is not None
+            else set()
+        )
+        uncovered_sources = {
+            file.resolve()
+            for file in files
+            if is_source(file) and file.resolve() not in tu_set
+        }
+
         findings: list[Finding] = []
         metrics_by_file: dict[str, dict[str, float]] = {
-            str(file): {} for file in files
+            str(file.resolve()): {} for file in files
         }
         tools: dict[str, str] = {}
 
@@ -235,10 +321,28 @@ class MaintainabilityEngine:
                 tools[analyzer.name] = "unavailable"
                 continue
             tools[analyzer.name] = "ok"
+            if analyzer.name == "cppcheck" and compile_commands_path:
+                findings.extend(analyzer.analyze_project(files).findings)
+                for header in sorted(uncovered_headers):
+                    findings.extend(analyzer.analyze_direct(header).findings)
+                for source in sorted(uncovered_sources):
+                    findings.extend(analyzer.analyze_direct(source).findings)
+                continue
+            if analyzer.name == "clang_tidy" and compile_commands_path:
+                tu_to_headers: dict[Path, list[Path]] = {}
+                for header, tu in chosen.items():
+                    tu_to_headers.setdefault(tu, []).append(header)
+                for tu in sorted(tu_to_headers):
+                    findings.extend(analyzer.analyze_tu(tu).findings)
+                for header in sorted(uncovered_headers):
+                    findings.extend(analyzer.analyze_direct(header).findings)
+                for source in sorted(uncovered_sources):
+                    findings.extend(analyzer.analyze_direct(source).findings)
+                continue
             for file in files:
                 result = analyzer.analyze(file)
                 findings.extend(result.findings)
-                metrics_by_file[str(file)].update(result.metrics)
+                metrics_by_file[str(file.resolve())].update(result.metrics)
 
         duplication = next(
             (analyzer for analyzer in self.analyzers if analyzer.name == "duplication"),
@@ -248,24 +352,37 @@ class MaintainabilityEngine:
             duplication_results, duplication_findings = duplication.analyze_files(files)
             findings.extend(duplication_findings)
             for file, result in duplication_results.items():
-                metrics_by_file.setdefault(file, {}).update(result.metrics)
+                metrics_by_file.setdefault(
+                    str(Path(file).resolve()), {}
+                ).update(result.metrics)
             tools[duplication.name] = "ok"
 
         if diff_map is not None:
             findings = [finding for finding in findings if _in_diff(finding, diff_map)]
+        findings = [
+            finding for finding in findings if _in_scan_scope(finding.file, paths)
+        ]
+        findings = _dedupe_findings(findings)
 
-        unique: dict[str, Finding] = {}
+        file_by_resolved: dict[Path, Path] = {file.resolve(): file for file in files}
         for finding in findings:
-            unique.setdefault(finding.id, finding)
-        findings = list(unique.values())
+            path = Path(finding.file)
+            try:
+                file_by_resolved.setdefault(path.resolve(), path)
+            except OSError:
+                continue
 
         file_scores = []
-        for file in files:
-            file_findings = [f for f in findings if f.file == str(file)]
+        for resolved, display in sorted(file_by_resolved.items()):
+            file_findings = [
+                finding
+                for finding in findings
+                if Path(finding.file).resolve() == resolved
+            ]
             file_scores.append(
                 self.scoring.score_file(
-                    str(file),
-                    metrics_by_file.get(str(file), {}),
+                    str(display),
+                    metrics_by_file.get(str(resolved), {}),
                     file_findings,
                 )
             )
