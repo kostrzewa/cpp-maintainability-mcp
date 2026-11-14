@@ -1,0 +1,12 @@
+{
+  "clang_version": "22",
+  "cxx_standard": "c++20",
+  "clang_tidy_checks": "bugprone-*,readability-*,performance-*,cppcoreguidelines-*",
+  "clean_env": true,
+  "clean_env_vars": ["LD_LIBRARY_PATH"],
+  "tool_paths": {
+    "clang_tidy": "/usr/bin/clang-tidy-22",
+    "cppcheck": "/usr/bin/cppcheck",
+    "libclang": "/usr/lib/llvm-22/lib/libclang.so"
+  }
+}
