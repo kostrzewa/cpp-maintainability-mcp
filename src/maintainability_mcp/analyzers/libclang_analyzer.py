@@ -23,9 +23,17 @@ class LibclangAnalyzer(Analyzer):
     def _configure(self) -> None:
         import clang.cindex as ci
 
-        if self.library_file and not self._configured:
+        if not self.library_file or self._configured:
+            return
+        current = getattr(ci.Config, "library_file", None)
+        if current is None:
             ci.Config.set_library_file(self.library_file)
-            self._configured = True
+        elif current != self.library_file:
+            raise RuntimeError(
+                f"libclang already loaded from {current}; "
+                f"cannot switch to {self.library_file}"
+            )
+        self._configured = True
 
     def available(self) -> bool:
         try:

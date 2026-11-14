@@ -7,3 +7,5 @@ __pycache__/
 .maintainability/
 opencode.json.bak
 tags*
+*pdf
+references/fetch.log

@@ -327,6 +327,7 @@ src/maintainability_mcp/
   history.py         # SQLite history
   analyzers/         # clang-tidy, cppcheck, libclang, heuristics
 tests/               # unittest suite
+tests/fixtures/      # C++ baseline samples (god class, leak, duplication, ...)
 scripts/             # bootstrap, toolchain check, opencode config
 references/          # paper corpus and design synthesis
 ```

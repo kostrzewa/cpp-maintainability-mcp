@@ -28,8 +28,11 @@ def check_libclang_bindings(library: str | None) -> tuple[bool, str]:
     except ImportError:
         return False, "clang Python bindings not installed (pip install 'clang>=21')"
     try:
-        if library:
+        current = getattr(ci.Config, "library_file", None)
+        if library and current is None:
             ci.Config.set_library_file(library)
+        elif library and current != library:
+            return False, f"libclang already loaded from {current}"
         ci.Index.create()
         return True, "loaded"
     except Exception as exc:  # noqa: BLE001 - libclang raises backend-specific errors
