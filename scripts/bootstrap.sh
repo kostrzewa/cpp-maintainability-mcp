@@ -82,10 +82,10 @@ if [[ "$DEV" -eq 1 ]]; then
 fi
 
 if [[ -n "$EXTRAS" ]]; then
-  echo "Installing maintainability-mcp[$EXTRAS]..."
+  echo "Installing cpp-maintainability-mcp[$EXTRAS]..."
   (cd "$ROOT" && "$VENV_PY" -m pip install --quiet -e ".[$EXTRAS]")
 else
-  echo "Installing maintainability-mcp..."
+  echo "Installing cpp-maintainability-mcp..."
   (cd "$ROOT" && "$VENV_PY" -m pip install --quiet -e ".")
 fi
 
@@ -98,14 +98,14 @@ Bootstrap complete.
 
 Next steps:
   1. Optional: copy the example config into your C++ project:
-       cp "$ROOT/maintainability.example.json" /path/to/cpp-project/maintainability.json
+       cp "$ROOT/cpp-maintainability.example.json" /path/to/cpp-project/cpp-maintainability.json
 
   2. Add the MCP server to opencode (1.19.5 legacy shape):
 
        "mcp": {
-         "maintainability": {
+         "cpp-maintainability": {
            "type": "local",
-           "command": ["$VENV_PY", "-m", "maintainability_mcp"],
+           "command": ["$VENV_PY", "-m", "cpp_maintainability_mcp"],
            "environment": {"PYTHONPATH": "$ROOT/src"},
            "enabled": true
          }

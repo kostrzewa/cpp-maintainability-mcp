@@ -2,8 +2,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from maintainability_mcp.config import Config
-from maintainability_mcp.engine import MaintainabilityEngine
+from cpp_maintainability_mcp.config import Config
+from cpp_maintainability_mcp.engine import MaintainabilityEngine
 
 
 class GuideTests(unittest.TestCase):

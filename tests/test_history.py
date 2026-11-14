@@ -2,7 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from maintainability_mcp.history import HistoryStore
+from cpp_maintainability_mcp.history import HistoryStore
 
 
 class HistoryTests(unittest.TestCase):

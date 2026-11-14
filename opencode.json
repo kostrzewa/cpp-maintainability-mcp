@@ -1,15 +1,15 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
-    "maintainability": {
+    "cpp-maintainability": {
       "type": "local",
       "command": [
-        "/home/bartek/code/maintainability/.venv/bin/python",
+        "/home/bartek/code/cpp-maintainability-mcp/.venv/bin/python",
         "-m",
-        "maintainability_mcp"
+        "cpp_maintainability_mcp"
       ],
       "environment": {
-        "PYTHONPATH": "/home/bartek/code/maintainability/src"
+        "PYTHONPATH": "/home/bartek/code/cpp-maintainability-mcp/src"
       },
       "enabled": true
     }

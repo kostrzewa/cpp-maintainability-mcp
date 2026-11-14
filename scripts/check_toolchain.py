@@ -13,8 +13,8 @@ SRC = ROOT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-from maintainability_mcp.config import Config
-from maintainability_mcp.toolchain import (
+from cpp_maintainability_mcp.config import Config
+from cpp_maintainability_mcp.toolchain import (
     detect_clang_version,
     resolve_clang_tidy,
     resolve_cppcheck,
@@ -44,8 +44,8 @@ def main() -> int:
     parser.add_argument(
         "--config",
         type=Path,
-        default=Path("maintainability.json"),
-        help="path to maintainability.json (default: ./maintainability.json)",
+        default=Path("cpp-maintainability.json"),
+        help="path to cpp-maintainability.json (default: ./cpp-maintainability.json)",
     )
     parser.add_argument(
         "--strict",

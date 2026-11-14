@@ -1,8 +1,8 @@
 import unittest
 
-from maintainability_mcp.config import Config
-from maintainability_mcp.models import band_for, make_finding
-from maintainability_mcp.scoring import ScoringEngine
+from cpp_maintainability_mcp.config import Config
+from cpp_maintainability_mcp.models import band_for, make_finding
+from cpp_maintainability_mcp.scoring import ScoringEngine
 
 
 class ScoringTests(unittest.TestCase):

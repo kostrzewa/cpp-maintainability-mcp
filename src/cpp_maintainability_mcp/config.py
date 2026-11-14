@@ -91,11 +91,11 @@ class Config:
     ignore_patterns: tuple[str, ...] = DEFAULT_IGNORE
     max_file_bytes: int = 2_000_000
     gate_threshold: float = 8.0
-    history_path: str = ".maintainability/history.sqlite3"
+    history_path: str = ".cpp-maintainability/history.sqlite3"
 
     @classmethod
     def load(cls, path: Path | None = None) -> Config:
-        path = path or Path("maintainability.json")
+        path = path or Path("cpp-maintainability.json")
         if not path.exists():
             return cls()
         data = json.loads(path.read_text(encoding="utf-8"))

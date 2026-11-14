@@ -21,7 +21,7 @@ def create_server(engine: MaintainabilityEngine | None = None):
             "The 'mcp' package is required. Install with: pip install mcp"
         )
     engine = engine or MaintainabilityEngine()
-    server = _Server("maintainability")
+    server = _Server("cpp-maintainability")
 
     @server.tool()
     def guide(

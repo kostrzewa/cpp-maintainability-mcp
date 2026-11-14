@@ -438,7 +438,7 @@ Guidelines:
 ### 6.6 Deployment without Docker
 
 - The server is a local **stdio** process started by the agent:
-  `uv run maintainability-mcp` (or `python3 -m maintainability_mcp`).
+  `uv run cpp-maintainability-mcp` (or `python3 -m cpp_maintainability_mcp`).
 - Dependencies are pinned in `pyproject.toml` and installed into a project-local
   venv; no container runtime is required.
 - Analyzers are invoked as subprocesses with timeouts and resource limits.
@@ -592,7 +592,7 @@ Start with a small, high-signal set; expand only when validated.
 Phase 3: implement the Python MCP server skeleton with the Finding schema, the
 Guide/Verify tools, toolsets, the fast/slow analyzer paths, the scoring engine,
 and the `compare_revisions` gate. Run it as a local stdio process
-(`uv run maintainability-mcp`, **no Docker**), then calibrate on a C++ corpus
+(`uv run cpp-maintainability-mcp`, **no Docker**), then calibrate on a C++ corpus
 and wire it into `opencode.json`.
 
 Full citations and download status for every reference are in

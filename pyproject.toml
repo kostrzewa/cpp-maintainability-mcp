@@ -3,12 +3,12 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "maintainability-mcp"
+name = "cpp-maintainability-mcp"
 version = "0.1.0"
-description = "MCP server for evaluating and improving C++ maintainability"
+description = "C++ maintainability MCP server for agent-generated code"
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "MIT" }
+license = "MIT"
 dependencies = [
   "mcp>=1.0",
   "lizard>=1.17",
@@ -19,7 +19,7 @@ clang = ["clang>=21"]
 dev = ["pytest>=8", "ruff"]
 
 [project.scripts]
-maintainability-mcp = "maintainability_mcp.server:main"
+cpp-maintainability-mcp = "cpp_maintainability_mcp.server:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

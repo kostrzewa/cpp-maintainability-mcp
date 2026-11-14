@@ -2,7 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from maintainability_mcp.analyzers.headers import HeaderAnalyzer
+from cpp_maintainability_mcp.analyzers.headers import HeaderAnalyzer
 
 
 class HeaderTests(unittest.TestCase):

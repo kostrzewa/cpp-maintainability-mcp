@@ -38,7 +38,7 @@ README = REFDIR / "README.md"
 LOG = REFDIR / "fetch.log"
 
 DELAY = 5.0
-UA = "maintainability-refs/0.1 (research; contact: bartek@example.org)"
+UA = "cpp-maintainability-mcp/0.1 (research; contact: bartek@example.org)"
 SESSION = requests.Session()
 SESSION.headers.update(
     {

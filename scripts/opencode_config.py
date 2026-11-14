@@ -17,7 +17,7 @@ SRC = ROOT / "src"
 def server_entry() -> dict:
     return {
         "type": "local",
-        "command": [str(VENV_PY), "-m", "maintainability_mcp"],
+        "command": [str(VENV_PY), "-m", "cpp_maintainability_mcp"],
         "environment": {"PYTHONPATH": str(SRC)},
     }
 
@@ -27,7 +27,7 @@ def legacy_snippet() -> dict:
     entry["enabled"] = True
     return {
         "$schema": "https://opencode.ai/config.json",
-        "mcp": {"maintainability": entry},
+        "mcp": {"cpp-maintainability": entry},
     }
 
 
@@ -36,7 +36,7 @@ def v2_snippet() -> dict:
     entry["codemode"] = False
     return {
         "$schema": "https://opencode.ai/config.json",
-        "mcp": {"servers": {"maintainability": entry}},
+        "mcp": {"servers": {"cpp-maintainability": entry}},
     }
 
 
@@ -45,19 +45,19 @@ def merge_legacy(existing: dict) -> dict:
     mcp = existing.setdefault("mcp", {})
     servers = mcp.get("servers")
     if isinstance(servers, dict):
-        servers.pop("maintainability", None)
+        servers.pop("cpp-maintainability", None)
         if not servers:
             mcp.pop("servers", None)
-    mcp["maintainability"] = legacy_snippet()["mcp"]["maintainability"]
+    mcp["cpp-maintainability"] = legacy_snippet()["mcp"]["cpp-maintainability"]
     return existing
 
 
 def merge_v2(existing: dict) -> dict:
     existing.setdefault("$schema", "https://opencode.ai/config.json")
     mcp = existing.setdefault("mcp", {})
-    mcp.pop("maintainability", None)
+    mcp.pop("cpp-maintainability", None)
     servers = mcp.setdefault("servers", {})
-    servers["maintainability"] = v2_snippet()["mcp"]["servers"]["maintainability"]
+    servers["cpp-maintainability"] = v2_snippet()["mcp"]["servers"]["cpp-maintainability"]
     return existing
 
 

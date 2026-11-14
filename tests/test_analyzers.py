@@ -2,8 +2,8 @@ import unittest
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from maintainability_mcp.analyzers.clang_tidy_analyzer import ClangTidyAnalyzer
-from maintainability_mcp.analyzers.cppcheck_analyzer import CppcheckAnalyzer
+from cpp_maintainability_mcp.analyzers.clang_tidy_analyzer import ClangTidyAnalyzer
+from cpp_maintainability_mcp.analyzers.cppcheck_analyzer import CppcheckAnalyzer
 
 
 class AnalyzerCommandTests(unittest.TestCase):

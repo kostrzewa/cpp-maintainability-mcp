@@ -2,7 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from maintainability_mcp.analyzers.duplication import DuplicationAnalyzer
+from cpp_maintainability_mcp.analyzers.duplication import DuplicationAnalyzer
 
 
 class DuplicationTests(unittest.TestCase):

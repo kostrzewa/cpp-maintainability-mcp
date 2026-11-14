@@ -1,4 +1,4 @@
-# Maintainability MCP Server
+# C++ Maintainability MCP Server
 
 An MCP server that evaluates and improves the maintainability of C++ code
 written by agents. It produces a composite 1–10 score, explains findings, ranks
@@ -39,7 +39,7 @@ It runs as a **local stdio process** — no Docker, no hosted service.
 ./scripts/bootstrap.sh
 
 # 2. Optional: tune the server for your C++ project
-cp maintainability.example.json /path/to/cpp-project/maintainability.json
+cp cpp-maintainability.example.json /path/to/cpp-project/cpp-maintainability.json
 
 # 3. Add the MCP server to opencode (see below), restart opencode, then:
 opencode mcp list
@@ -81,7 +81,7 @@ Verify the toolchain:
 Start the server directly (it speaks MCP over stdio; Ctrl-C to stop):
 
 ```sh
-.venv/bin/python -m maintainability_mcp
+.venv/bin/python -m cpp_maintainability_mcp
 ```
 
 ## Configure opencode
@@ -96,15 +96,15 @@ The server is a local MCP server. Add it to the **project** config
 {
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
-    "maintainability": {
+    "cpp-maintainability": {
       "type": "local",
       "command": [
-        "/path/to/maintainability/.venv/bin/python",
+        "/path/to/cpp-maintainability-mcp/.venv/bin/python",
         "-m",
-        "maintainability_mcp"
+        "cpp_maintainability_mcp"
       ],
       "environment": {
-        "PYTHONPATH": "/path/to/maintainability/src"
+        "PYTHONPATH": "/path/to/cpp-maintainability-mcp/src"
       },
       "enabled": true
     }
@@ -119,15 +119,15 @@ The server is a local MCP server. Add it to the **project** config
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
     "servers": {
-      "maintainability": {
+      "cpp-maintainability": {
         "type": "local",
         "command": [
-          "/path/to/maintainability/.venv/bin/python",
+          "/path/to/cpp-maintainability-mcp/.venv/bin/python",
           "-m",
-          "maintainability_mcp"
+          "cpp_maintainability_mcp"
         ],
         "environment": {
-          "PYTHONPATH": "/path/to/maintainability/src"
+          "PYTHONPATH": "/path/to/cpp-maintainability-mcp/src"
         },
         "codemode": false
       }
@@ -154,7 +154,7 @@ merging fragile.
   that project.
 - **Global config** (`~/.config/opencode/opencode.jsonc`) applies everywhere.
 - Omit `cwd` so the server runs in the current workspace and reads that
-  project's `maintainability.json` and `.clang-tidy`.
+  project's `cpp-maintainability.json` and `.clang-tidy`.
 - A project entry with the same server name replaces the global one.
 
 Restart opencode after editing. Verify with `opencode mcp list` or `/mcps`.
@@ -204,9 +204,9 @@ guide → agent writes C++ → maintainability_scan(diff)
 
 ## Configuration
 
-The server reads `maintainability.json` from its working directory (the C++
+The server reads `cpp-maintainability.json` from its working directory (the C++
 project root when `cwd` is omitted). Start from
-[`maintainability.example.json`](maintainability.example.json):
+[`cpp-maintainability.example.json`](cpp-maintainability.example.json):
 
 ```json
 {
@@ -233,7 +233,7 @@ project root when `cwd` is omitted). Start from
 | `weights` | see `config.py` | Per-dimension weights; must sum to 1.0 |
 | `thresholds` | see `config.py` | `(good, bad)` thresholds per dimension |
 | `gate_threshold` | `8.0` | Minimum score for `compare_revisions` |
-| `history_path` | `.maintainability/history.sqlite3` | SQLite history location |
+| `history_path` | `.cpp-maintainability/history.sqlite3` | SQLite history location |
 | `extensions` | C++ source/header suffixes | Files to scan |
 | `ignore_patterns` | build/vendor dirs | Directories or globs to skip |
 | `max_file_bytes` | `2000000` | Skip larger files |
@@ -249,7 +249,7 @@ needs; only the analyzer subprocesses get the sanitized environment.
 
 The server resolves tools in this order:
 
-1. `tool_paths` / `libclang_library` from `maintainability.json`.
+1. `tool_paths` / `libclang_library` from `cpp-maintainability.json`.
 2. Versioned executable: `clang-tidy-{version}`, `clang-{version}`,
    `scan-build-{version}`, `cppcheck-{version}`.
 3. Unversioned executable: `clang-tidy`, `clang`, `scan-build`, `cppcheck`.
@@ -271,7 +271,7 @@ The Python bindings are loaded in-process with
 **`opencode mcp list` shows the server disconnected**
 
 - Check the `command` and `PYTHONPATH` paths in `opencode.json`.
-- Ensure `.venv/bin/python` exists and `python -m maintainability_mcp` starts.
+- Ensure `.venv/bin/python` exists and `python -m cpp_maintainability_mcp` starts.
 - Run `opencode --print-logs --log-level DEBUG`.
 - Restart opencode after config changes.
 
@@ -303,7 +303,7 @@ The Python bindings are loaded in-process with
 
 **Where is history stored?**
 
-- `.maintainability/history.sqlite3` under the server's working directory.
+- `.cpp-maintainability/history.sqlite3` under the server's working directory.
 
 ## Development
 
@@ -316,7 +316,7 @@ PYTHONPATH=src .venv/bin/python -m unittest discover -s tests
 Project layout:
 
 ```
-src/maintainability_mcp/
+src/cpp_maintainability_mcp/
   server.py          # MCP tools
   engine.py          # orchestration
   scoring.py         # composite score

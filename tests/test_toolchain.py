@@ -4,8 +4,8 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from maintainability_mcp.config import Config
-from maintainability_mcp.toolchain import (
+from cpp_maintainability_mcp.config import Config
+from cpp_maintainability_mcp.toolchain import (
     DEFAULT_CLANG_TIDY_CHECKS,
     default_checks,
     detect_clang_version,

@@ -1,6 +1,6 @@
 import unittest
 
-from maintainability_mcp.analyzers.cppcheck_analyzer import CppcheckAnalyzer
+from cpp_maintainability_mcp.analyzers.cppcheck_analyzer import CppcheckAnalyzer
 
 SARIF = """
 Checking foo.cpp ...

@@ -1,8 +1,8 @@
 import unittest
 
-from maintainability_mcp.config import Config
-from maintainability_mcp.feedback import FeedbackEngine
-from maintainability_mcp.models import ProjectScore, make_finding
+from cpp_maintainability_mcp.config import Config
+from cpp_maintainability_mcp.feedback import FeedbackEngine
+from cpp_maintainability_mcp.models import ProjectScore, make_finding
 
 
 class FeedbackTests(unittest.TestCase):
