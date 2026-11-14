@@ -228,7 +228,6 @@ project root when `cwd` is omitted). Start from
 {
   "clang_version": "22",
   "cxx_standard": "c++20",
-  "clang_tidy_checks": "bugprone-*,readability-*,performance-*,cppcoreguidelines-*",
   "clean_env": true,
   "clean_env_vars": ["LD_LIBRARY_PATH"]
 }
@@ -238,7 +237,7 @@ project root when `cwd` is omitted). Start from
 |---|---|---|
 | `clang_version` | auto-detect | Preferred clang version, e.g. `"22"` |
 | `cxx_standard` | `"c++20"` | Standard passed to clang-tidy, cppcheck, and libclang |
-| `clang_tidy_checks` | project `.clang-tidy`, else the default set | Explicit clang-tidy checks |
+| `clang_tidy_checks` | project `.clang-tidy`, else a conservative default set | Explicit clang-tidy checks |
 | `clean_env` | `true` | Remove `clean_env_vars` from analyzer subprocesses |
 | `clean_env_vars` | `["LD_LIBRARY_PATH"]` | Variables removed when `clean_env` is on |
 | `tool_env` | `{}` | Extra environment variables for analyzer subprocesses |

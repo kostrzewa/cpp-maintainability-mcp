@@ -55,6 +55,30 @@ class AnalyzerCommandTests(unittest.TestCase):
         self.assertFalse(ClangTidyAnalyzer(None).available())
         self.assertFalse(CppcheckAnalyzer(None).available())
 
+    def test_low_priority_checks_are_deprioritized(self):
+        analyzer = ClangTidyAnalyzer(
+            "/usr/bin/clang-tidy-22", None, "c++20", "bugprone-*", {}
+        )
+        output = (
+            "a.cpp:1:1: warning: swap "
+            "[bugprone-easily-swappable-parameters]\n"
+            "a.cpp:2:1: warning: magic "
+            "[cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers]\n"
+        )
+        with patch("subprocess.run") as run:
+            run.return_value = MagicMock(stdout=output, stderr="", returncode=0)
+            result = analyzer.analyze_direct(Path("a.cpp"))
+        by_rule = {finding.rule: finding for finding in result.findings}
+        swap = by_rule["clang-tidy:bugprone-easily-swappable-parameters"]
+        magic = by_rule[
+            "clang-tidy:cppcoreguidelines-avoid-magic-numbers,"
+            "readability-magic-numbers"
+        ]
+        self.assertEqual(swap.effort, "M")
+        self.assertLess(sum(swap.impact.values()), 1.0)
+        self.assertEqual(magic.effort, "S")
+        self.assertLess(sum(magic.impact.values()), 1.0)
+
 
 if __name__ == "__main__":
     unittest.main()

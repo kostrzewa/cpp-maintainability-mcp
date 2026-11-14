@@ -82,6 +82,14 @@ class ToolchainTests(unittest.TestCase):
                 default_checks(Config(), Path(tmp)), DEFAULT_CLANG_TIDY_CHECKS
             )
 
+    def test_default_checks_excludes_noisy_checks(self):
+        checks = DEFAULT_CLANG_TIDY_CHECKS
+        self.assertIn("-readability-redundant-typename", checks)
+        self.assertIn("-cppcoreguidelines-pro-type-member-init", checks)
+        self.assertIn("-cppcoreguidelines-pro-bounds-pointer-arithmetic", checks)
+        self.assertIn("-cppcoreguidelines-avoid-const-or-ref-data-members", checks)
+        self.assertIn("-cppcoreguidelines-special-member-functions", checks)
+
 
 if __name__ == "__main__":
     unittest.main()

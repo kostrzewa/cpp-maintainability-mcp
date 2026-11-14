@@ -12,7 +12,12 @@ from pathlib import Path
 from .config import Config
 
 DEFAULT_CLANG_TIDY_CHECKS = (
-    "bugprone-*,readability-*,performance-*,cppcoreguidelines-*"
+    "bugprone-*,readability-*,performance-*,cppcoreguidelines-*,"
+    "-readability-redundant-typename,"
+    "-cppcoreguidelines-pro-type-member-init,"
+    "-cppcoreguidelines-pro-bounds-pointer-arithmetic,"
+    "-cppcoreguidelines-avoid-const-or-ref-data-members,"
+    "-cppcoreguidelines-special-member-functions"
 )
 
 

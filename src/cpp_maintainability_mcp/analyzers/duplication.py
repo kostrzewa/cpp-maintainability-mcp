@@ -6,6 +6,7 @@ import hashlib
 import re
 from pathlib import Path
 
+from ..cpp_text import strip_comments_and_strings
 from ..models import AnalysisResult, make_finding
 from .base import Analyzer
 
@@ -13,9 +14,7 @@ WINDOW = 6
 
 
 def _normalize(line: str) -> str:
-    line = re.sub(r"//.*", "", line)
-    line = re.sub(r"\s+", " ", line)
-    return line.strip()
+    return re.sub(r"\s+", " ", line).strip()
 
 
 class DuplicationAnalyzer(Analyzer):
@@ -32,9 +31,10 @@ class DuplicationAnalyzer(Analyzer):
         normalized: dict[str, list[str]] = {}
         for path in paths:
             try:
-                lines = path.read_text(errors="replace").splitlines()
+                text = path.read_text(errors="replace")
             except OSError:
                 continue
+            lines = strip_comments_and_strings(text).splitlines()
             norm = [_normalize(line) for line in lines]
             normalized[str(path)] = norm
             for i in range(len(norm) - WINDOW + 1):

@@ -1,7 +1,6 @@
 {
   "clang_version": "22",
   "cxx_standard": "c++20",
-  "clang_tidy_checks": "bugprone-*,readability-*,performance-*,cppcoreguidelines-*",
   "clean_env": true,
   "clean_env_vars": ["LD_LIBRARY_PATH"],
   "compile_commands": "build/compile_commands.json",

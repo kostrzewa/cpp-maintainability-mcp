@@ -15,6 +15,21 @@ DIAGNOSTIC_RE = re.compile(
     r"^(.*?):(\d+):(\d+): (warning|error|note): (.*?) \[([^\]]+)\]$"
 )
 
+LOW_PRIORITY_CHECKS = {
+    "bugprone-easily-swappable-parameters": (
+        {"defects": 0.1, "time": 0.1, "predictability": 0.1},
+        "M",
+    ),
+    "cppcoreguidelines-avoid-magic-numbers": (
+        {"defects": 0.1, "time": 0.1, "predictability": 0.1},
+        "S",
+    ),
+    "readability-magic-numbers": (
+        {"defects": 0.1, "time": 0.1, "predictability": 0.1},
+        "S",
+    ),
+}
+
 
 class ClangTidyAnalyzer(Analyzer):
     name = "clang_tidy"
@@ -97,6 +112,7 @@ class ClangTidyAnalyzer(Analyzer):
             file, line_no, column, severity, message, check = match.groups()
             if severity == "note":
                 continue
+            impact, effort = self._priority(check)
             findings.append(
                 make_finding(
                     file=file,
@@ -110,8 +126,8 @@ class ClangTidyAnalyzer(Analyzer):
                     suggested_fix=(
                         "Apply the clang-tidy fix or refactor the affected code."
                     ),
-                    impact={"defects": 0.4, "time": 0.3, "predictability": 0.3},
-                    effort="S",
+                    impact=impact,
+                    effort=effort,
                     confidence=0.85,
                     analyzer=self.name,
                 )
@@ -127,3 +143,10 @@ class ClangTidyAnalyzer(Analyzer):
         if check.startswith(("cppcoreguidelines-", "cert-")):
             return "resource_safety"
         return "static_analysis"
+
+    @staticmethod
+    def _priority(check: str) -> tuple[dict[str, float], str]:
+        for name, (impact, effort) in LOW_PRIORITY_CHECKS.items():
+            if name in check:
+                return impact, effort
+        return {"defects": 0.4, "time": 0.3, "predictability": 0.3}, "S"

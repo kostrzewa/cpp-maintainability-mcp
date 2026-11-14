@@ -28,6 +28,28 @@ class FeedbackTests(unittest.TestCase):
         ranked = FeedbackEngine(Config()).rank([low, high], budget=1)
         self.assertEqual(ranked[0].id, high.id)
 
+    def test_low_priority_findings_rank_below_genuine(self):
+        low = make_finding(
+            file="a.cpp",
+            rule="low",
+            dimension="static_analysis",
+            severity="warning",
+            message="low",
+            impact={"defects": 0.1, "time": 0.1, "predictability": 0.1},
+            effort="M",
+        )
+        genuine = make_finding(
+            file="b.cpp",
+            rule="genuine",
+            dimension="static_analysis",
+            severity="warning",
+            message="genuine",
+            impact={"defects": 0.4, "time": 0.3, "predictability": 0.3},
+            effort="S",
+        )
+        ranked = FeedbackEngine(Config()).rank([low, genuine], budget=2)
+        self.assertEqual(ranked[0].id, genuine.id)
+
     def test_compare_reports_delta_and_gate(self):
         before = ProjectScore(8.0, "healthy", [], [])
         after = ProjectScore(7.0, "warning", [], [])

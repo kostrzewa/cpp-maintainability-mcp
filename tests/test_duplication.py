@@ -32,6 +32,21 @@ class DuplicationTests(unittest.TestCase):
             self.assertFalse(findings)
             self.assertEqual(results[str(first)].metrics["duplication"], 0.0)
 
+    def test_duplicate_comment_blocks_are_ignored(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            first = Path(tmp) / "a.cpp"
+            second = Path(tmp) / "b.cpp"
+            comment = """/**
+ * @brief Shared documentation
+ * @param value The value
+ * @return The result
+ * @details More details
+ */"""
+            first.write_text(comment + "\nint a() { return 1; }\n")
+            second.write_text(comment + "\nint b() { return 2; }\n")
+            _, findings = DuplicationAnalyzer().analyze_files([first, second])
+            self.assertFalse(findings)
+
 
 if __name__ == "__main__":
     unittest.main()
