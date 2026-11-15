@@ -31,6 +31,10 @@ while [[ $# -gt 0 ]]; do
       shift
       ;;
     --python)
+      if [[ $# -lt 2 ]]; then
+        echo "error: --python requires an argument" >&2
+        exit 2
+      fi
       PYTHON="$2"
       shift 2
       ;;
@@ -60,12 +64,30 @@ if sys.version_info < (3, 11):
     )
 PY
 
-if [[ ! -d "$ROOT/.venv" ]]; then
+if [[ ! -x "$ROOT/.venv/bin/python" ]]; then
+  if ! "$PYTHON" -c "import venv, ensurepip" >/dev/null 2>&1; then
+    echo "error: $PYTHON cannot create a pip-enabled venv (venv/ensurepip missing)." >&2
+    echo "  Debian/Ubuntu: sudo apt install python3-venv" >&2
+    echo "  Fedora:        sudo dnf install python3-pip-wheel python3-setuptools-wheel" >&2
+    echo "  Or pass --python /path/to/python with venv+ensurepip support." >&2
+    exit 1
+  fi
   echo "Creating .venv..."
   "$PYTHON" -m venv "$ROOT/.venv"
 fi
 
 VENV_PY="$ROOT/.venv/bin/python"
+if ! "$VENV_PY" -m pip --version >/dev/null 2>&1; then
+  echo "Bootstrapping pip in .venv..."
+  if ! "$VENV_PY" -m ensurepip --upgrade; then
+    echo "error: could not bootstrap pip in .venv; ensurepip wheels are missing." >&2
+    echo "  Debian/Ubuntu: sudo apt install python3-venv" >&2
+    echo "  Fedora:        sudo dnf install python3-pip-wheel python3-setuptools-wheel" >&2
+    echo "  Or remove .venv and rerun with a Python that includes ensurepip." >&2
+    exit 1
+  fi
+fi
+
 echo "Upgrading pip..."
 "$VENV_PY" -m pip install --quiet --upgrade pip
 

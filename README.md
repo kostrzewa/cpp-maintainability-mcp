@@ -26,6 +26,10 @@ It runs as a **local stdio process** — no Docker, no hosted service.
 
 - Python **3.11+**
 - Linux or macOS
+- On Debian/Ubuntu, `python3-venv` (and its `python3-pip-whl` /
+  `python3-setuptools-whl` dependencies); on Fedora, `python3-pip-wheel` and
+  `python3-setuptools-wheel`. `bootstrap.sh` checks for these and prints the
+  install command if they are missing.
 - Optional but recommended:
   - clang 22 (`clang-tidy-22`, `clang-22`, `llvm-config-22`)
   - cppcheck 2.17+
@@ -57,6 +61,10 @@ resolved absolute paths.
 ./scripts/bootstrap.sh --no-clang   # skip the Python clang bindings
 ./scripts/bootstrap.sh --python /usr/bin/python3.13
 ```
+
+The script is idempotent: rerun it to change the installed extras. For example,
+if you bootstrapped with `--no-clang`, rerun `./scripts/bootstrap.sh` to add the
+Python `clang` bindings.
 
 ## Manual installation
 
@@ -379,6 +387,8 @@ and `include_paths`/`defines` when there is no database.
 **libclang is unavailable**
 
 - Install the bindings: `.venv/bin/pip install 'clang>=21'`.
+- If you bootstrapped with `--no-clang`, rerun `./scripts/bootstrap.sh` to
+  install the bindings.
 - Set `libclang_library` if auto-detection picks the wrong library.
 
 **clang-tidy produces no findings**
